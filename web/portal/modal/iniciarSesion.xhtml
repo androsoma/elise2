@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"        
+      contentType="text/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:dialog id="dialogIniciarSesion" header="Iniciar sesión" widgetVar="dialogIniciarSesion" modal="true" draggable="false" resizable="false"
+              closeOnEscape="true">
+        <h:form id="formIniciarSesion">
+            <h:panelGrid columns="1" width="100%">
+                <h:outputLabel for="inputTextNombreUsuario"  value="Nombre de suario:"/>
+                <p:inputText id="inputTextNombreUsuario" value="#{administracionControl.usuarioAutenticado.nombreUsuario}"
+                             required="true" requiredMessage="Debe especificar un nombre de usuario." style="width: 100%;" />
+                <p:message for="inputTextNombreUsuario" />
+                
+                <h:outputLabel for="passwordContrasenaUsuario" value="Contraseña:"/>
+                <p:password id="passwordContrasenaUsuario" value="#{administracionControl.usuarioAutenticado.contrasena}"
+                            required="true" requiredMessage="Debe especificar una contraseña." style="width: 100%;" />
+                <p:message for="passwordContrasenaUsuario" />
+                <br />
+                <p:commandButton value="Ingresar" action="administracion" actionListener="#{administracionControl.autenticarUsuario}" update="formIniciarSesion" />
+            </h:panelGrid>
+        </h:form> 
+    </p:dialog>
+</html>

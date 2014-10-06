@@ -1,0 +1,121 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile">
+
+    <pm:page id="medidor">
+        <pm:header title="Medidor de energía">
+            <p:commandButton value="Atrás" action="pm:opcionespunto" icon="ui-icon-back" styleClass="ui-btn-inline" />
+        </pm:header>
+
+        <pm:content>
+            <h:form id="formMedidor">
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuTipoMedidor" value="Tipo de medidor" />
+                    <h:selectOneMenu id="selectOneMenuTipoMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.tipoMedidor.id}">
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.tiposMedidor}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuFabricanteMedidor" value="Fabricante" />
+                    <h:selectOneMenu id="selectOneMenuFabricanteMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.fabricante.id}">
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.fabricantes}" var="fabricante" itemValue="#{fabricante.id}" itemLabel="#{fabricante.nombre}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="inputTextReferenciaMedidor" value="Referencia" />
+                    <h:inputText id="inputTextReferenciaMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.referencia}">
+
+                        <p:ajax event="blur" />
+                    </h:inputText>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="inputTextSerialMedidor" value="Serial" />
+                    <h:inputText id="inputTextSerialMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.serial}">
+
+                        <p:ajax event="blur" />
+                    </h:inputText>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuFrecuenciaMedidor" value="Frecuencia" />
+                    <h:selectOneRadio id="selectOneMenuFrecuenciaMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.frecuencia.id}">
+                        <f:selectItems value="#{inventarioControl.frecuencias}" var="frecuencia" itemValue="#{frecuencia.id}" itemLabel="#{frecuencia.descripcion}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneRadio>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuPrecisionMedidor" value="Clase precisión" />
+                    <h:selectOneMenu id="selectOneMenuPrecisionMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.clasePrecision.id}">
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.clasesPrecision}" var="clase" itemValue="#{clase.id}" itemLabel="#{clase.descripcion}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuTipoConexionMedidor" value="Tipo de conexión red" />
+                    <h:selectOneMenu id="selectOneMenuTipoConexionMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.tipoConexionMedidor.id}">
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.tiposConexionMedidor}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuVoltajeAltaMedidor" value="Voltaje Alta" />
+                    <h:selectOneMenu id="selectOneMenuVoltajeAltaMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.voltajeAlta.id}" >
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.voltajes}" var="voltaje" itemValue="#{voltaje.id}" itemLabel="#{voltaje.descripcion}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuVoltajeBajaMedidor" value="Voltaje Baja" />
+                    <h:selectOneMenu id="selectOneMenuVoltajeBajaMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.voltajeBaja.id}">
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.voltajes}" var="voltaje" itemValue="#{voltaje.id}" itemLabel="#{voltaje.descripcion}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="inputTextPotenciaMedidor" value="Potencia máxima a medir" />
+                    <h:selectOneMenu id="inputTextPotenciaMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.potenciaMaxima.id}">
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.potencias}" var="potencia" itemValue="#{potencia.id}" itemLabel="#{potencia.descripcion}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuTipoProteccionAmbiente" value="Tipo protección ambiente" />
+                    <h:selectOneMenu id="selectOneMenuTipoProteccionAmbiente" value="#{inventarioControl.puntoLuz.medidorEnergia.tipoProteccion.id}">
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.tiposProteccion}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+            </h:form>
+        </pm:content>
+    </pm:page>
+</f:view>

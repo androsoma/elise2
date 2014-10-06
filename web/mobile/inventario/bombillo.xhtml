@@ -1,0 +1,72 @@
+<f:view renderKitId="PRIMEFACES_MOBILE"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile"
+        contentType="text/html">
+
+    <pm:page id="bombillo">
+        <pm:header title="Bombillo" >
+            <p:commandButton value="Atrás" action="pm:opcionespunto" icon="ui-icon-back" styleClass="ui-btn-inline" />
+        </pm:header>
+
+        <pm:content>
+            <h:form id="formBombillo">
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuTipoBombillo" value="Tipo bombillo" />
+                    <h:selectOneMenu id="selectOneMenuTipoBombillo" value="#{inventarioControl.puntoLuz.bombillo.tipoBombillo.id}">
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />  
+                        <f:selectItems value="#{inventarioControl.tiposBombillo}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuFabricanteBombillo" value="Fabricante"/>
+                    <h:selectOneMenu id="selectOneMenuFabricanteBombillo" value="#{inventarioControl.puntoLuz.bombillo.fabricante.id}" >
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.fabricantes}" var="fabricante" itemValue="#{fabricante.id}" itemLabel="#{fabricante.nombre}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="inputTextReferenciaBombillo" value="Referencia"/>
+                    <h:inputText id="inputTextReferenciaBombillo" value="#{inventarioControl.puntoLuz.bombillo.referencia}" title="Referencia">
+
+                        <p:ajax event="blur" />
+                    </h:inputText>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="inputTextFlujoLuminoso" value="Flujo luminoso" />
+                    <h:inputText id="inputTextFlujoLuminoso" value="#{inventarioControl.puntoLuz.bombillo.flujoLuminoso}" title="Flujo luminoso">
+
+                        <p:ajax event="blur" />
+                    </h:inputText>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuPotencia" value="Potencia" />
+                    <h:selectOneMenu id="selectOneMenuPotencia" value="#{inventarioControl.puntoLuz.bombillo.potencia.id}" >
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />  
+                        <f:selectItems value="#{inventarioControl.potencias}" var="potencia" itemValue="#{potencia.id}" itemLabel="#{potencia.descripcion}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="inputTextVidaUtil" value="Vida útil" />
+                    <h:inputText id="inputTextVidaUtil" value="#{inventarioControl.puntoLuz.bombillo.vidaUtil}" title="Vida útil">
+
+                        <p:ajax event="blur" />
+                    </h:inputText>
+                </pm:field>
+            </h:form>
+        </pm:content>
+    </pm:page>
+</f:view>

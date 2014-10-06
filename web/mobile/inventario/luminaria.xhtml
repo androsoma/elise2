@@ -1,0 +1,82 @@
+<f:view renderKitId="PRIMEFACES_MOBILE"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile">
+
+    <pm:page id="luminaria">
+        <pm:header title="Luminaria" fixed="true">
+            <p:commandButton value="Atrás" action="pm:opcionespunto" icon="ui-icon-back" styleClass="ui-btn-inline" />
+        </pm:header>
+
+        <pm:content>
+            <h:form id="formMenuLuminaria">
+                <pm:field>
+                    <p:menu>
+                        <p:menuitem value="Brazo luminaria" action="pm:brazoluminaria" update=":brazoluminaria" />
+                        <p:menuitem value="Balasto" action="pm:balasto" update=":balasto" />
+                        <p:menuitem value="Arrancador" action="pm:arrancador" actionListener="#{inventarioControl.inicializarArrancador}" update=":arrancador" />
+                    </p:menu>
+                </pm:field>
+            </h:form>
+
+            <h:form id="formLuminaria">
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuFabricanteLuminaria" value="Fabricante" />
+                    <h:selectOneMenu id="selectOneMenuFabricanteLuminaria" value="#{inventarioControl.puntoLuz.luminaria.fabricante.id}">
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.fabricantes}" var="fabricante" itemValue="#{fabricante.id}" itemLabel="#{fabricante.nombre}" />
+
+                        <p:ajax event="change"  />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="inputTextReferenciaLuminaria" value="Referencia" />
+                    <p:inputText id="inputTextReferenciaLuminaria" value="#{inventarioControl.puntoLuz.luminaria.referencia}" title="Referencia">
+                        <p:ajax event="blur" />
+                    </p:inputText>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuTipoHerraje" value="Tipo herraje" />
+                    <h:selectOneMenu id="selectOneMenuTipoHerraje" value="#{inventarioControl.puntoLuz.luminaria.tipoHerraje.id}">
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.tiposHerraje}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+
+                        <p:ajax event="change"  />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="inputTextAlturaLuminaria" value="Altura" />
+                    <h:inputText id="inputTextAlturaLuminaria" value="#{inventarioControl.puntoLuz.luminaria.altura}" title="Altura">
+
+                        <p:ajax event="blur"/>
+                    </h:inputText>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="inputTextNivelIluminacion" value="Nivel de iluminación" />
+                    <h:inputText id="inputTextNivelIluminacion" value="#{inventarioControl.puntoLuz.luminaria.nivelIluminacion}" title="Nivel de iluminación" >
+
+                        <p:ajax event="blur"/>
+                    </h:inputText>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuPotenciaLuminaria" value="Potencia" />
+                    <h:selectOneMenu id="selectOneMenuPotenciaLuminaria" value="#{inventarioControl.puntoLuz.luminaria.potencia.id}">
+                        <f:selectItem itemLabel="Seleccione.." itemValue=""/>
+                        <f:selectItems value="#{inventarioControl.potencias}" var="potencia" itemValue="#{potencia.id}" itemLabel="#{potencia.descripcion}"/>
+
+                        <p:ajax event="change"/>
+                    </h:selectOneMenu>
+                </pm:field>
+                
+                <p:commandButton value="Valores" actionListener="#{inventarioControl.imprimirValoresLuminaria}" />
+            </h:form>
+        </pm:content>
+    </pm:page>
+</f:view>

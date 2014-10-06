@@ -1,0 +1,32 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile">
+
+    <pm:page id="mapanuevopunto">
+        <pm:header title="Ubicación">
+            <p:commandButton value="Atrás" action="pm:menuprincipal" icon="ui-icon-back" styleClass="ui-btn-inline" />
+        </pm:header>
+
+        <pm:content id="content">
+            <center>
+                <h:form id="formMapaNuevoPunto">
+                    <h:inputHidden id="latitudNuevoPunto" value="#{inventarioControl.puntoLuz.ubicacionPunto.latittud}" />
+                    <h:inputHidden id="longitudNuevoPunto" value="#{inventarioControl.puntoLuz.ubicacionPunto.longitud}" />
+
+                    <pm:field>
+                        <p:gmap id="gmapNuevoPunto" center="0,0" type="ROADMAP" widgetVar="gmapNuevoPunto"
+                                zoom="18" style="height: 370px; width: 100%;" streetView="true" />
+                    </pm:field>
+
+                    <p:commandButton action="#{inventarioControl.imprimirUbicacion}" />
+                </h:form>
+            </center>
+        </pm:content>
+
+        <pm:footer style="text-align: right;" fixed="true">
+            <p:commandButton value="Agregar y continuar" action="pm:ubicacionnuevopunto" update=":ubicacionnuevopunto" icon="ui-icon-arrow-r" styleClass="ui-btn-inline" iconPos="right" />
+        </pm:footer>
+    </pm:page>
+</f:view>

@@ -1,0 +1,57 @@
+<f:view renderKitId="PRIMEFACES_MOBILE"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile"
+        contentType="text/html">
+
+    <pm:page id="ubicacionnuevopunto">
+        <pm:header title="Ubicación" >
+            <p:commandButton value="Atrás" action="pm:mapanuevopunto" icon="ui-icon-back" styleClass="ui-btn-inline" />
+        </pm:header>
+
+        <pm:content>
+            <center>
+                <h:form id="formUbicacionNuevoPunto">
+                    <pm:field>
+                        <h:outputLabel for="selectOneMenuDepartamento" value="Departamento" />
+                        <h:selectOneMenu id="selectOneMenuDepartamento">
+                            <f:selectItem itemLabel="Caldas" itemValue="1" />  
+                        </h:selectOneMenu>
+                    </pm:field>
+
+                    <pm:field>
+                        <h:outputLabel for="selectOneMenuMunicipio" value="Municipio" />
+                        <h:selectOneMenu id="selectOneMenuMunicipio" value="#{inventarioControl.puntoLuz.ubicacionPunto.municipio.id}">
+                            <f:selectItem itemLabel="Manizales" itemValue="1" />
+
+                            <p:ajax event="change"/>
+                        </h:selectOneMenu>
+                    </pm:field>
+
+                    <pm:field>
+                        <h:outputLabel for="selectOneMenuBarrio" value="Barrio" />
+                        <h:selectOneMenu id="selectOneMenuBarrio" value="#{inventarioControl.puntoLuz.ubicacionPunto.barrio.id}">
+                            <f:selectItem itemValue="" itemLabel="Seleccione..." />
+                            <f:selectItems value="#{inventarioControl.barrios}" var="barrio" itemValue="#{barrio.id}" itemLabel="#{barrio.nombre}" />
+
+                            <p:ajax event="change"/>
+                        </h:selectOneMenu>
+                    </pm:field>
+
+                    <pm:field>
+                        <h:outputLabel for="inputTextDireccion" value="Dirección" />
+                        <h:inputText id="inputTextDireccion" value="#{inventarioControl.puntoLuz.ubicacionPunto.direccion}" title="Digite la dirección" >
+                            <p:ajax event="blur" />
+                        </h:inputText>
+                    </pm:field>
+                </h:form>
+            </center>
+        </pm:content>
+
+        <pm:footer fixed="true" style="text-align: right;">
+            <p:commandButton value="Continuar" action="pm:opcionespunto" actionListener="#{inventarioControl.imprimirUbicacion}" icon="ui-icon-arrow-r" styleClass="ui-btn-inline" iconPos="right" />
+        </pm:footer>
+    </pm:page>
+</f:view>

@@ -1,0 +1,56 @@
+<f:view renderKitId="PRIMEFACES_MOBILE"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile"
+        contentType="text/html">
+
+    <pm:page id="poste">
+        <pm:header title="Poste">
+            <p:commandButton value="Atrás" action="pm:opcionespunto" icon="ui-icon-back" styleClass="ui-btn-inline" />
+        </pm:header>
+
+        <pm:content>
+            <h:form id="formPoste">
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuFabricantePoste" value="Fabricante" />
+                    <h:selectOneMenu id="selectOneMenuFabricantePoste" value="#{inventarioControl.puntoLuz.poste.fabricante.id}">
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.fabricantes}" var="fabricante" itemValue="#{fabricante.id}" itemLabel="#{fabricante.nombre}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="inputTextReferenciaPoste" value="Referencia" />
+                    <h:inputText id="inputTextReferenciaPoste" value="#{inventarioControl.puntoLuz.poste.referencia}" title="Referencia">
+
+                        <p:ajax event="blur" />
+                    </h:inputText>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuMaterial" value="Material" />
+                    <h:selectOneMenu id="selectOneMenuMaterial" value="#{inventarioControl.puntoLuz.poste.material.id}">
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.materialesPoste}" var="material" itemValue="#{material.id}" itemLabel="#{material.descripcion}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuAltura" value="Altura" />
+                    <h:selectOneMenu id="selectOneMenuAltura" value="#{inventarioControl.puntoLuz.poste.alturaPoste.id}">
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.alturasPoste}" var="altura" itemValue="#{altura.id}" itemLabel="#{altura.descripcion}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+            </h:form>
+        </pm:content>
+    </pm:page>
+</f:view>

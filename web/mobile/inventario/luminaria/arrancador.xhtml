@@ -1,0 +1,46 @@
+<f:view renderKitId="PRIMEFACES_MOBILE"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile"
+        contentType="text/html">
+
+    <pm:page id="arrancador">
+        <pm:header title="Arrancador">
+            <p:commandButton value="Atrás" action="pm:luminaria" icon="ui-icon-back" styleClass="ui-btn-inline" />
+        </pm:header>
+
+        <pm:content>
+            <h:form id="formArrancador">
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuTipoArrancador" value="Tipo arrancador" />
+                    <h:selectOneMenu id="selectOneMenuTipoArrancador" value="#{inventarioControl.puntoLuz.luminaria.arrancador.tipoArrancador.id}" >
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.tiposArrancador}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+
+                        <p:ajax event="change"  />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuFabricanteArrancador" value="Fabricante" />
+                    <h:selectOneMenu id="selectOneMenuFabricanteArrancador" value="#{inventarioControl.puntoLuz.luminaria.arrancador.fabricante.id}" >
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.fabricantes}" var="fabricante" itemValue="#{fabricante.id}" itemLabel="#{fabricante.nombre}" />
+
+                        <p:ajax event="change"  />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="inputTextReferenciaArrancador" value="Referencia" />
+                    <h:inputText id="inputTextReferenciaArrancador" value="#{inventarioControl.puntoLuz.luminaria.arrancador.referencia}" title="Referencia">
+
+                        <p:ajax event="blur" />
+                    </h:inputText>
+                </pm:field>
+            </h:form>
+        </pm:content>
+    </pm:page>
+</f:view>

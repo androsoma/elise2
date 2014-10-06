@@ -1,0 +1,25 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile">
+
+    <pm:page id="menuprincipal">
+        <pm:header title="Menú principal">
+            <p:commandButton value="Salir" action="pm:principal" icon="ui-icon-back" styleClass="ui-btn-inline" />
+        </pm:header>
+
+        <pm:content>
+            <center>
+                <h:form id="formMenuPrincipal">
+                    <pm:field>
+                        <p:menu>
+                            <p:menuitem value="Nuevo punto" action="pm:mapanuevopunto" actionListener="#{inventarioControl.inicializarPunto}" update=":mapanuevopunto:formMapaNuevoPunto" />
+                            <p:menuitem value="Incidentes reportados" action="pm:incidentes" actionListener="#{mantenimientoControl.cargarIncidentesConfirmados}" update=":incidentes:formIncidentes" />
+                        </p:menu>
+                    </pm:field>
+                </h:form>
+            </center>
+        </pm:content>
+    </pm:page>
+</f:view>

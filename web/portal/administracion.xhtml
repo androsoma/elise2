@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:head>
+        <title>Administración ELISE</title>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true" />
+    </h:head>
+
+    <h:body>
+        <h:form id="formAdministracion">
+            <p:growl id="growlMensajes" showDetail="true" />
+
+            <p:layout id="layoutPrincipal" fullPage="true">
+                <p:layoutUnit id="layoutUnitEncabezadoAdministracion" size="75" position="north" resizable="false" closable="false"
+                              collapsible="true" style="text-align: center;">
+                    <h:outputLabel value="ELISE" style="font-size: 250%; font-family: sans-serif;" />
+                    <p:commandButton value="Cerrar sesión" action="index" style="float: right;" />
+                </p:layoutUnit>
+
+                <p:layoutUnit id="layoutUnitMenuAdministracion" position="west" size="25%" header="Menú principal" style="text-align: center;">
+                    <p:menu style="border: none; width: 99%;">
+                        <p:menuitem value="Puntos de luz" />
+                        <p:menuitem value="Incidentes reportados" />
+                        <p:menuitem value="Usuarios" />
+                        <p:menuitem value="Estadísticas" />
+                    </p:menu>
+                </p:layoutUnit>
+
+                <p:layoutUnit id="layoutUnitAdministracion" position="center">
+                    
+                </p:layoutUnit>
+            </p:layout>
+        </h:form>
+    </h:body>
+</html>

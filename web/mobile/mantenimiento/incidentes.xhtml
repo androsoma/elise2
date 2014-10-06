@@ -1,0 +1,31 @@
+<f:view renderKitId="PRIMEFACES_MOBILE"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        contentType="text/html">
+
+    <pm:page id="incidentes">
+        <pm:header title="Incidentes">
+            <p:commandButton value="Atrás" action="pm:menuprincipal" icon="ui-icon-back" styleClass="ui-btn-inline" />
+        </pm:header>
+
+        <pm:content>
+            <h:form id="formIncidentes">
+                <p:dataList id="dataListIncidentes" value="#{mantenimientoControl.incidentes}" var="incidente"
+                            emptyMessage="No hay incidentes reportados pendientes por cierre.">
+                    <p:commandLink action="pm:ubicacionpuntoincidente"
+                                   actionListener="#{mantenimientoControl.seleccionarIncidente(incidente)}"
+                                   update=":ubicacionpuntoincidente:formUbicacionPuntoIncidente">
+                        <h2><h:outputText value="#{incidente.tipoIncidente.descripcion}" /></h2>
+                        <p><h:outputText value="#{incidente.puntoLuz.ubicacionPunto.direccion}" /></p>
+                    </p:commandLink>
+                </p:dataList>
+
+                <h:outputText value="No hay incidentes reportados." rendered="#{empty mantenimientoControl.incidentes}" />
+            </h:form>
+        </pm:content>
+    </pm:page>
+</f:view>

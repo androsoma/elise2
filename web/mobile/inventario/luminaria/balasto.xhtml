@@ -1,0 +1,56 @@
+<f:view renderKitId="PRIMEFACES_MOBILE"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile"
+        contentType="text/html">
+
+    <pm:page id="balasto">
+        <pm:header title="Balasto">
+            <p:commandButton value="Atrás" action="pm:luminaria" icon="ui-icon-back" styleClass="ui-btn-inline" />
+        </pm:header>
+
+        <pm:content>
+            <h:form id="formBalasto">
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuTipoBalasto" value="Tipo balasto lámpara" />
+                    <h:selectOneMenu id="selectOneMenuTipoBalasto" value="#{inventarioControl.puntoLuz.luminaria.balasto.tipoBalasto.id}">
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.tiposBalasto}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuFabricanteBalasto" value="Fabricante" />
+                    <h:selectOneMenu id="selectOneMenuFabricanteBalasto" value="#{inventarioControl.puntoLuz.luminaria.balasto.fabricante.id}" >
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.fabricantes}" var="fabricante" itemValue="#{fabricante.id}" itemLabel="#{fabricante.nombre}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="inputTextReferenciaBalasto" value="Referencia" />
+                    <h:inputText id="inputTextReferenciaBalasto" value="#{inventarioControl.puntoLuz.luminaria.balasto.referencia}" title="Referencia">
+
+                        <p:ajax event="blur" />
+                    </h:inputText>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="selectOneMenuTipoProteccion" value="Tipo protección ambiente" />
+                    <h:selectOneMenu id="selectOneMenuTipoProteccion" value="#{inventarioControl.puntoLuz.luminaria.balasto.tipoProteccion.id}">
+                        <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                        <f:selectItems value="#{inventarioControl.tiposProteccion}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+
+                        <p:ajax event="change" />
+                    </h:selectOneMenu>
+                </pm:field>
+            </h:form>
+        </pm:content>
+    </pm:page>
+</f:view>

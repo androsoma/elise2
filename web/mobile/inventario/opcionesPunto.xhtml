@@ -1,0 +1,31 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile">
+
+    <pm:page id="opcionespunto">
+        <pm:header title="Opciones" >
+            <p:commandButton value="Atrás" action="pm:ubicacionnuevopunto" icon="ui-icon-back" styleClass="ui-btn-inline" />
+        </pm:header>
+
+        <pm:content>
+            <h:form id="formOpcionesPunto">
+
+                <pm:field>
+                    <p:menu>
+                        <p:menuitem value="Transformador" action="#{inventarioControl.inicializarTiposTransformador}" update=":transformador" />
+                        <p:menuitem value="Luminaria" action="#{inventarioControl.inicializarTiposLuminaria}" update=":luminaria" />
+                        <p:menuitem value="Bombillo" action="#{inventarioControl.inicializarTiposBombillo}" update=":bombillo" />
+                        <p:menuitem value="Poste" action="#{inventarioControl.inicializarTiposPoste}" update=":poste" />
+                        <p:menuitem value="Medidor energía" action="#{inventarioControl.inicializarTiposMedidor}" update=":medidor" />
+                    </p:menu>
+                </pm:field>
+            </h:form>           
+        </pm:content>
+
+        <pm:footer style="text-align:right" fixed="true">
+            <p:commandButton value="Guardar punto luz" action="pm:principal" actionListener="#{inventarioControl.guardarPuntoLuz}" styleClass="ui-btn-a" />
+        </pm:footer>
+    </pm:page>
+</f:view>

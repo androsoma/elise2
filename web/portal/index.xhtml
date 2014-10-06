@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:head>
+        <title>Elise</title>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true" />
+    </h:head>
+
+    <h:body>
+        <h:form id="formCiudadano">
+            <p:growl id="growlMensajes" showDetail="true" />
+
+            <p:layout id="layoutPrincipal" fullPage="true">
+                <p:layoutUnit id="layoutUnitEncabezadoIndex" position="north" size="75" resizable="false" closable="false" collapsible="true" style="text-align: center;">
+                    <h:outputLabel value="ELISE" style="font-size: 250%; font-family: sans-serif;" />
+                    <p:commandButton value="Iniciar sesión" onclick="PF('dialogIniciarSesion').show();" style="float: right;" />
+                </p:layoutUnit>
+
+                <p:layoutUnit id="layoutUnitReportarIncidente" position="west" size="35%">
+                    <h:panelGrid id="panelGridReportarIncidente" columns="1" width="100%">
+                        <h:outputLabel for="inputTextCorreo" value="Correo electrónico" />
+                        <p:inputText id="inputTextCorreo" value="#{administracionControl.incidente.ciudadano.tercero.email}"
+                                     required="true" requiredMessage="Debe relacionar un correo electrónico." style="width: 98%;"
+                                     validatorMessage="Debe relacionar un correo electrónico válido.">
+                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                        </p:inputText>
+                        <p:message for="inputTextCorreo" />
+
+                        <h:outputLabel for="inputTextNombres" value="Nombres:" />
+                        <p:inputText id="inputTextNombres" value="#{administracionControl.incidente.ciudadano.tercero.nombres}"
+                                     required="true" requiredMessage="Debe escribir sus nombres." style="width: 98%;" />
+                        <p:message for="inputTextNombres" />
+
+                        <h:outputLabel for="inputTextApellidos" value="Apellidos:"/>
+                        <p:inputText id="inputTextApellidos" value="#{administracionControl.incidente.ciudadano.tercero.apellidos}"
+                                     required="true" requiredMessage="Debe escribir sus apellidos." style="width: 98%;" />
+                        <p:message for="inputTextApellidos" />
+
+                        <h:outputLabel for="selectOneMenuTipoIncidente" value="Tipo incidente:" />
+                        <p:selectOneMenu id="selectOneMenuTipoIncidente" value="#{administracionControl.incidente.tipoIncidente.id}"
+                                         required="true" requiredMessage="Debe seleccionar un tipo de incidente." style="width: 99%;">
+                            <f:selectItem itemValue="" itemLabel="Seleccione..." />
+                            <f:selectItems value="#{administracionControl.tiposIndicentes}" var="tipoIncidente" itemValue="#{tipoIncidente.id}" itemLabel="#{tipoIncidente.descripcion}" />
+                        </p:selectOneMenu>
+                        <p:message for="selectOneMenuTipoIncidente" />
+
+                        <h:inputHidden id="inputHiddenPuntoSeleccionado" value="#{administracionControl.tituloPuntoLuzSeleccionado}" required="true" requiredMessage="Debe seleccionar un marcador en el mapa." />
+                        <p:message for="inputHiddenPuntoSeleccionado" />
+
+                        <h:outputLabel for="inputTextareaObservaciones" value="Observaciones:" />
+                        <p:inputTextarea id="inputTextareaObservaciones" rows="5"  queryDelay="750" minQueryLength="4" value="#{administracionControl.incidente.observaciones}" style="width: 98%;" />
+
+                        <p:commandButton value="Adjuntar imágenes" style="float: right;" onclick="PF('dialogAdjuntarImagenes').show();" update="panelGridAdjuntarImagenes" />
+
+                        <p:commandButton value="Registrar incidente" action="#{administracionControl.guardarIncidente}" update="panelGridReportarIncidente" process="@form" />
+                    </h:panelGrid>
+                </p:layoutUnit>
+
+                <p:layoutUnit id="layoutUnitMapa" position="center" size="65%">
+                    <p:outputLabel for="outputLabelPuntoSeleccionado" value="Punto seleccionado: " style="font-weight: bold;"/>
+                    <p:outputLabel value="#{administracionControl.puntoLuzSeleccionado.ubicacionPunto.direccion}" id="outputLabelPuntoSeleccionado" />
+
+
+                    <p:gmap id="mapaPuntosLuz" widgetVar="mapaPuntosLuz"
+                            center="5.067738, -75.510030" zoom="15" type="ROADMAP"
+                            model="#{administracionControl.modeloMapa}"
+                            style="width:100%; height:600px;">
+
+                        <p:ajax event="overlaySelect" listener="#{administracionControl.marcadorSeleccionado}" update="outputLabelPuntoSeleccionado, inputHiddenPuntoSeleccionado" />
+                    </p:gmap>
+                </p:layoutUnit>
+            </p:layout>
+
+            <p:dialog id="dialogAdjuntarImagenes" widgetVar="dialogAdjuntarImagenes" closable="true" header="Adjuntar imágenes"
+                      closeOnEscape="true" hideEffect="drop" showEffect="drop" modal="true">
+                <h:panelGrid id="panelGridAdjuntarImagenes" width="100%">
+                    <p:fileUpload fileUploadListener="#{administracionControl.handleFileUpload}" mode="advanced" dragDropSupport="false"
+                                  update="galleriaImagenesIncidente" label="Buscar archivo" uploadLabel="Cargar" cancelLabel="Cancelar" auto="true"
+                                  invalidFileMessage="Archivo inválido." fileLimitMessage="Máximo 3 archivos." invalidSizeMessage="El límite es de 100 Kb."
+                                  sizeLimit="1000000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"  />
+                </h:panelGrid>
+
+                <p:galleria id="galleriaImagenesIncidente" value="#{administracionControl.imagenesIncidente}" var="imagen"
+                            showCaption="false" effectSpeed="1000">
+                    <p:graphicImage name="#{imagen}" />
+                </p:galleria>
+            </p:dialog>
+        </h:form>
+        
+        <ui:include src="modal/iniciarSesion.xhtml"/>
+    </h:body>
+</html>

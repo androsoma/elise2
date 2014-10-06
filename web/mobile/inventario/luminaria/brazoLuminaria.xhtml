@@ -1,0 +1,34 @@
+<f:view renderKitId="PRIMEFACES_MOBILE"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile"
+        contentType="text/html">
+
+    <pm:page id="brazoluminaria">
+        <pm:header title="Brazo Luminaria">
+            <p:commandButton value="Atrás" action="pm:luminaria" icon="ui-icon-back" styleClass="ui-btn-inline" />
+        </pm:header>
+
+        <pm:content>
+            <h:form id="formBrazoLuminaria">
+                <pm:field>
+                    <h:outputLabel for="inputTextLargo" value="Largo [metros]" />
+                    <h:inputText id="inputTextLargo" value="#{inventarioControl.puntoLuz.luminaria.brazoLuminaria.largo}" title="Largo [metros]">
+
+                        <p:ajax event="blur" />
+                    </h:inputText>
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="inputTextDiametro" value="Diámetro [pulgadas]" />
+                    <h:inputText id="inputTextDiametro" value="#{inventarioControl.puntoLuz.luminaria.brazoLuminaria.diametro}" title="Diámetro [pulgadas]">
+
+                        <p:ajax event="blur" />
+                    </h:inputText>
+                </pm:field>
+            </h:form>
+        </pm:content>
+    </pm:page>
+</f:view>

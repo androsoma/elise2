@@ -1,0 +1,41 @@
+<f:view xmlns:h="http://xmlns.jcp.org/jsf/html" 
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:pm="http://primefaces.org/mobile"
+        xmlns:p="http://primefaces.org/ui">
+
+    <pm:page id="ubicacionpuntoincidente">
+        <pm:header title="Ubicación" fixed="true">
+            <p:commandButton value="Atrás" action="pm:incidentes" icon="ui-icon-back" styleClass="ui-btn-inline" />
+        </pm:header>
+
+        <pm:content>
+            <h:form id="formUbicacionPuntoIncidente">
+                <pm:field>
+                    <h:outputLabel for="outputTextTipoIncidente" value="Tipo de incidente" />
+                    <p:inputText id="outputTextTipoIncidente" value="#{mantenimientoControl.reportePuntoLuzSeleccionado.tipoIncidente.descripcion}" />
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="outputTextUbicacionIncidente" value="Dirección" />
+                    <p:inputText id="outputTextUbicacionIncidente" value="#{mantenimientoControl.reportePuntoLuzSeleccionado.puntoLuz.ubicacionPunto.direccion}" />
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="outputTextBarrioIncidente" value="Barrio" />
+                    <p:inputText id="outputTextBarrioIncidente" value="#{mantenimientoControl.reportePuntoLuzSeleccionado.puntoLuz.ubicacionPunto.barrio.nombre}" />
+                </pm:field>
+
+                <pm:field>
+                    <h:outputLabel for="outputTextLocalidadIncidente" value="Localidad" />
+                    <p:inputText id="outputTextLocalidadIncidente" value="#{mantenimientoControl.reportePuntoLuzSeleccionado.puntoLuz.ubicacionPunto.municipio.nombre}, #{mantenimientoControl.reportePuntoLuzSeleccionado.puntoLuz.ubicacionPunto.municipio.departamento.nombre}" />
+                </pm:field>
+            </h:form>
+        </pm:content>
+
+        <pm:footer style="text-align: right;" fixed="true">
+            <p:commandButton value="Continuar" action="pm:accionescierre" actionListener="#{mantenimientoControl.cargarAccionesCierre}" update=":accionescierre:formAccionesCierre" icon="ui-icon-arrow-r" styleClass="ui-btn-inline" iconPos="right" />
+        </pm:footer>
+    </pm:page>
+</f:view>
+
+

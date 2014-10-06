@@ -1,0 +1,29 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile">
+
+    <pm:page id="accionescierre">
+        <pm:header title="Acciones de cierre">
+            <p:commandButton value="Atrás" action="pm:ubicacionpuntoincidente" icon="ui-icon-back" styleClass="ui-btn-inline" />
+        </pm:header>
+
+        <pm:content>
+            <h:form id="formAccionesCierre">
+                <pm:field>
+                    <h:outputLabel for="selectManyChackboxAccionesCierre" value="Seleccione las acciones ejecutadas para el cierre de incidencia: " style="width: 100%;" />
+                    <p:selectManyCheckbox id="selectManyChackboxAccionesCierre" value="#{mantenimientoControl.accionesCierreSeleccionadas}" style="width: 100%;">
+                        <f:selectItems value="#{mantenimientoControl.accionesCierreDisponibles}" var="accionCierre" itemValue="#{accionCierre.id}" itemLabel="#{accionCierre.descripcion}" />
+
+                        <p:ajax listener="#{mantenimientoControl.imprimirSeleccionadas}" />
+                    </p:selectManyCheckbox>
+                </pm:field>
+
+                <pm:field>
+                    <p:commandButton id="commandButtonCerrarIncidencia" value="Cerrar incidencia" action="pm:incidentes" actionListener="#{mantenimientoControl.cerrarReporte}" update=":incidentes:formIncidentes" immediate="true" />
+                </pm:field>
+            </h:form>
+        </pm:content>
+    </pm:page>
+</f:view>

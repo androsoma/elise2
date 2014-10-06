@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pm="http://primefaces.org/mobile"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <f:view renderKitId="PRIMEFACES_MOBILE" />
+
+    <h:head>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true" />
+        <script type="text/javascript">
+            var map;
+            var centro;
+            var marker = null;
+
+            function localizar() {
+                navigator.geolocation.getCurrentPosition(mostrarMapa, error);
+            }
+
+            function mostrarMapa(posicion) {
+                var contenedor = document.getElementById("mapanuevopunto:formMapaNuevoPunto:gmapNuevoPunto");
+                var latitud = posicion.coords.latitude;
+                var longitud = posicion.coords.longitude;
+
+                centro = new google.maps.LatLng(latitud, longitud);
+
+                var propiedadesMapa = {
+                    zoom: 18,
+                    center: centro,
+                    draggable: true,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    mapTypeControl: false
+                };
+
+                map = new google.maps.Map(contenedor, propiedadesMapa);
+
+                google.maps.event.addListener(map, 'click', function(event) {
+                    placeMarker(event.latLng);
+                });
+
+                callMap();
+
+            }
+
+            function error(errorC) {
+                if (erroC.code === "0")
+                    alert("Error desconocido");
+                else if (errorC.code === "1")
+                    alert("No se pudo ubicar al usuario");
+                else if (errorC.code === "2")
+                    alert("Posición no disponible");
+                else if (errorC.code === "3")
+                    alert("No se pudo ubicar el punto");
+            }
+
+            function resize_map() {
+                var iWidth = $(window).width();
+                var iHeight = $(window).height();
+
+                $(map).height(iHeight - 155 - 65 - 15 - 2 - 51);
+
+                $(map).width(iWidth - 32 - 402);
+            }
+
+            $(window).ready(function() {
+                resize_map();
+            });
+
+            $(window).resize(function() {
+                resize_map();
+            });
+
+            $(document).on("pageshow", "#mapanuevopunto", function() {
+                var iHeight = $('#content').height();
+                $(map).height(iHeight - 155 - 65 - 15 - 2 - 51);
+
+                var latitudReferencia;
+                var longitudReferencia;
+
+                latitudReferencia = document.getElementById('mapanuevopunto:formMapaNuevoPunto:latitudNuevoPunto').value;
+                longitudReferencia = document.getElementById('mapanuevopunto:formMapaNuevoPunto:longitudNuevoPunto').value;
+
+                if (latitudReferencia === "0.0") {
+                    localizar();
+                } else if (longitudReferencia === "0.0") {
+                    localizar();
+                }
+            });
+
+            function callMap() {
+                resize_map();
+                google.maps.event.trigger(map, "resize");
+            }
+
+            function placeMarker(location) {
+                if (marker === null) {
+
+                    marker = new google.maps.Marker({
+                        position: location,
+                        map: map,
+                        draggable: true
+                    });
+
+                    google.maps.event.addListener(marker, 'dragend', function() {
+                        placeMarker(marker.getPosition());
+                    });
+                }
+
+                document.getElementById('mapanuevopunto:formMapaNuevoPunto:latitudNuevoPunto').value = location.lat();
+                document.getElementById('mapanuevopunto:formMapaNuevoPunto:longitudNuevoPunto').value = location.lng();
+            }
+        </script> 
+    </h:head>
+
+    <h:body>
+        <pm:page id="principal">
+            <pm:header title="Bienvenido a ELISE" />
+
+            <pm:content>
+                <h:form id="formAutenticacion">
+                    <pm:field>
+                        <h:outputLabel for="inputTextNombreUsuario" value="Nombre de usuario" />
+                        <h:inputText id="inputTextNombreUsuario" value="#{inventarioControl.usuario.nombreUsuario}" />
+                    </pm:field>
+
+                    <pm:field>
+                        <h:outputLabel for="inputSecretContrasena" value="Contraseña" />
+                        <h:inputSecret id="inputSecretContrasena" value="#{inventarioControl.usuario.contrasena}" />
+                    </pm:field>
+
+                    <pm:field>
+                        <p:commandButton id="commandButtonIngresar" action="pm:menuprincipal" value="Ingresar" />
+                    </pm:field>
+                </h:form>
+            </pm:content>
+        </pm:page>
+
+        <ui:include src="inventario/menuPrincipal.xhtml" />
+        <ui:include src="inventario/mapaNuevoPunto.xhtml" />
+        <ui:include src="inventario/ubicacionNuevoPunto.xhtml" />
+        <ui:include src="inventario/opcionesPunto.xhtml" />
+        <ui:include src="inventario/transformador.xhtml" />
+        <ui:include src="inventario/luminaria.xhtml" />
+        <ui:include src="inventario/luminaria/brazoLuminaria.xhtml" />
+        <ui:include src="inventario/luminaria/balasto.xhtml" />
+        <ui:include src="inventario/luminaria/arrancador.xhtml" />
+        <ui:include src="inventario/bombillo.xhtml" />
+        <ui:include src="inventario/poste.xhtml" />
+        <ui:include src="inventario/medidor.xhtml" />
+        <ui:include src="mantenimiento/incidentes.xhtml" />
+        <ui:include src="mantenimiento/ubicacionPuntoIncidente.xhtml" />
+        <ui:include src="mantenimiento/accionesCierre.xhtml" />
+    </h:body>
+</html>
