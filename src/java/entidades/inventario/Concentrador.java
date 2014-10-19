@@ -6,12 +6,14 @@
 package entidades.inventario;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
@@ -28,6 +30,9 @@ public class Concentrador implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ConcentradorSequence")
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String identificador;
+
     @Column(nullable = false)
     private String referencia;
 
@@ -39,12 +44,23 @@ public class Concentrador implements Serializable {
     @JoinColumn(name = "fk_tipoconcentrador")
     private TipoConcentrador tipoConcentrador;
 
+    @ManyToMany(mappedBy = "concentradores")
+    private List<Luminaria> luminarias;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getIdentificador() {
+        return identificador;
+    }
+
+    public void setIdentificador(String identificador) {
+        this.identificador = identificador;
     }
 
     public String getReferencia() {
@@ -69,6 +85,14 @@ public class Concentrador implements Serializable {
 
     public void setTipoConcentrador(TipoConcentrador tipoConcentrador) {
         this.tipoConcentrador = tipoConcentrador;
+    }
+
+    public List<Luminaria> getLuminarias() {
+        return luminarias;
+    }
+
+    public void setLuminarias(List<Luminaria> luminarias) {
+        this.luminarias = luminarias;
     }
 
     @Override

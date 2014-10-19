@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entidades.inventario;
 
 import entidades.mantenimiento.Zona;
@@ -25,30 +24,32 @@ import javax.persistence.SequenceGenerator;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "Barrio.findByMunicipio", 
+    @NamedQuery(name = "Barrio.findByZona",
             query = "SELECT b"
-                    + " FROM Barrio b"
-                    + " JOIN b.municipio m"
-                    + " WHERE m.id = :codigoMunicipio ")})
+            + " FROM Barrio b"
+            + " JOIN b.zona z"
+            + " WHERE z.id = :idZona"
+            + " ORDER BY b.nombre")})
 public class Barrio implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @SequenceGenerator(name = "BarrioSequence", sequenceName = "barrio_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BarrioSequence")
     private Long id;
-    
+
     @Column(length = 50, nullable = false)
     private String nombre;
-    
+
     @ManyToOne
     @JoinColumn(name = "fk_municipio", nullable = false)
     private Municipio municipio;
-    
+
     @ManyToOne
     @JoinColumn(name = "fk_zona", nullable = false)
     private Zona zona;
-    
+
     public Long getId() {
         return id;
     }
@@ -80,7 +81,7 @@ public class Barrio implements Serializable {
     public void setZona(Zona zona) {
         this.zona = zona;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -102,5 +103,5 @@ public class Barrio implements Serializable {
     public String toString() {
         return nombre;
     }
-    
+
 }

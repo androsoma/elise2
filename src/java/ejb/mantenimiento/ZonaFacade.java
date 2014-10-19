@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ejb.mantenimiento;
 
 import entidades.mantenimiento.Zona;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -17,6 +18,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class ZonaFacade extends AbstractFacade<Zona> {
+
     @PersistenceContext(unitName = "elisePU")
     private EntityManager em;
 
@@ -28,5 +30,11 @@ public class ZonaFacade extends AbstractFacade<Zona> {
     public ZonaFacade() {
         super(Zona.class);
     }
-    
+
+    public List<Zona> getZonasByMunicipio(Long idMunicipio) {
+        Query query = em.createNamedQuery("Zona.findByMunicipio");
+        query.setParameter("idMunicipio", idMunicipio);
+
+        return query.getResultList();
+    }
 }

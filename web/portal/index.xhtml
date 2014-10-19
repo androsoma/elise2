@@ -24,20 +24,21 @@
                 <p:layoutUnit id="layoutUnitReportarIncidente" position="west" size="35%">
                     <h:panelGrid id="panelGridReportarIncidente" columns="1" width="100%">
                         <h:outputLabel for="inputTextCorreo" value="Correo electrónico" />
-                        <p:inputText id="inputTextCorreo" value="#{administracionControl.incidente.ciudadano.tercero.email}"
+                        <p:inputText id="inputTextCorreo" value="#{administracionControl.incidente.tercero.email}"
                                      required="true" requiredMessage="Debe relacionar un correo electrónico." style="width: 98%;"
                                      validatorMessage="Debe relacionar un correo electrónico válido.">
+                            
                             <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                         </p:inputText>
                         <p:message for="inputTextCorreo" />
 
                         <h:outputLabel for="inputTextNombres" value="Nombres:" />
-                        <p:inputText id="inputTextNombres" value="#{administracionControl.incidente.ciudadano.tercero.nombres}"
+                        <p:inputText id="inputTextNombres" value="#{administracionControl.incidente.tercero.nombres}"
                                      required="true" requiredMessage="Debe escribir sus nombres." style="width: 98%;" />
                         <p:message for="inputTextNombres" />
 
                         <h:outputLabel for="inputTextApellidos" value="Apellidos:"/>
-                        <p:inputText id="inputTextApellidos" value="#{administracionControl.incidente.ciudadano.tercero.apellidos}"
+                        <p:inputText id="inputTextApellidos" value="#{administracionControl.incidente.tercero.apellidos}"
                                      required="true" requiredMessage="Debe escribir sus apellidos." style="width: 98%;" />
                         <p:message for="inputTextApellidos" />
 
@@ -57,7 +58,7 @@
 
                         <p:commandButton value="Adjuntar imágenes" style="float: right;" onclick="PF('dialogAdjuntarImagenes').show();" update="panelGridAdjuntarImagenes" />
 
-                        <p:commandButton value="Registrar incidente" action="#{administracionControl.guardarIncidente}" update="panelGridReportarIncidente" process="@form" />
+                        <p:commandButton value="Registrar incidente" action="#{administracionControl.guardarIncidenteCiudadano}" update="panelGridReportarIncidente" process="@form" />
                     </h:panelGrid>
                 </p:layoutUnit>
 
@@ -68,10 +69,12 @@
 
                     <p:gmap id="mapaPuntosLuz" widgetVar="mapaPuntosLuz"
                             center="5.067738, -75.510030" zoom="15" type="ROADMAP"
-                            model="#{administracionControl.modeloMapa}"
-                            style="width:100%; height:600px;">
+                            model="#{administracionControl.modeloMapaCiudadano}"
+                            style="width:100%; height:500px;">
 
-                        <p:ajax event="overlaySelect" listener="#{administracionControl.marcadorSeleccionado}" update="outputLabelPuntoSeleccionado, inputHiddenPuntoSeleccionado" />
+                        <p:ajax event="overlaySelect" listener="#{administracionControl.marcadorSeleccionadoCiudadano}" update="outputLabelPuntoSeleccionado, inputHiddenPuntoSeleccionado" />
+
+                        <p:gmapInfoWindow rendered="false" />
                     </p:gmap>
                 </p:layoutUnit>
             </p:layout>
@@ -91,7 +94,7 @@
                 </p:galleria>
             </p:dialog>
         </h:form>
-        
-        <ui:include src="modal/iniciarSesion.xhtml"/>
+
+        <ui:include src="modal/iniciarSesion.xhtml" />
     </h:body>
 </html>

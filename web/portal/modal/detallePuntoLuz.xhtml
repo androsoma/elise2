@@ -1,0 +1,94 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"        
+      contentType="text/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:dialog id="dialogDetallePuntoLuz" header="Detalle" widgetVar="dialogDetallePuntoLuz"
+              closable="false" modal="true" resizable="false" draggable="false">
+        <h:form id="formDetallePuntoLuz">
+            <p:tabView >
+                <p:tab title="Ubicación">
+                    <h:panelGrid id="panelGridUbicacionPuntoLuz" width="100%">
+                        <h:outputLabel for="inputTextDireccion" value="Dirección" style="font-weight: bold;" />
+                        <p:inputText id="inputTextDireccion" value="#{inventarioControl.puntoLuz.ubicacionPunto.direccion}" style="width: 100%;" />
+
+                        <h:outputLabel for="selectOneMenuDepartamento" value="Departamento" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuDepartamento" value="#{inventarioControl.departamento.id}">
+                            <f:selectItem itemValue="" itemLabel="Seleccione..." />
+                            <f:selectItems value="#{inventarioControl.departamentos}" var="departamento" itemValue="#{departamento.id}" itemLabel="#{departamento.nombre}" />
+
+                            <p:ajax event="valueChange" listener="#{inventarioControl.cambioDepartamento}" update="panelGridUbicacionPuntoLuz" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="selectOneMenuMunicipio" value="Municipio" style="font-weight: bold;" rendered="#{not empty inventarioControl.municipios}" />
+                        <p:selectOneMenu id="selectOneMenuMunicipio" value="#{inventarioControl.municipio.id}" rendered="#{not empty inventarioControl.municipios}">
+                            <f:selectItem itemValue="" itemLabel="Seleccione..." />
+                            <f:selectItems value="#{inventarioControl.municipios}" var="municipio" itemValue="#{municipio.id}" itemLabel="#{municipio.nombre}" />
+
+                            <p:ajax event="valueChange" listener="#{inventarioControl.cambioMunicipio}" update="panelGridUbicacionPuntoLuz" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="selectOneMenuComuna" value="Comuna" style="font-weight: bold;" rendered="#{not empty inventarioControl.zonas}" />
+                        <p:selectOneMenu id="selectOneMenuComuna" value="#{inventarioControl.zona.id}" rendered="#{not empty inventarioControl.zonas}">
+                            <f:selectItem itemValue="" itemLabel="Seleccione..." />
+                            <f:selectItems value="#{inventarioControl.zonas}" var="comuna" itemValue="#{comuna.id}" itemLabel="#{comuna.nombre}" />
+
+                            <p:ajax event="valueChange" listener="#{inventarioControl.cambioZona}" update="panelGridUbicacionPuntoLuz" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="selectOneMenuBarrio" value="Barrio" style="font-weight: bold;" rendered="#{not empty inventarioControl.barrios}" />
+                        <p:selectOneMenu id="selectOneMenuBarrio" value="#{inventarioControl.barrio.id}" rendered="#{not empty inventarioControl.barrios}">
+                            <f:selectItem itemValue="" itemLabel="Seleccione..." />
+                            <f:selectItems value="#{inventarioControl.barrios}" var="barrio" itemValue="#{barrio.id}" itemLabel="#{barrio.nombre}"/>
+                        </p:selectOneMenu>
+
+                        <p:commandButton value="Guardar cambios" action="#{inventarioControl.guardarUbicacion}" oncomplete="PF('dialogDetallePuntoLuz').hide();" />
+                    </h:panelGrid>
+                </p:tab>
+
+                <p:tab title="Transformador">
+
+                    <h:outputLabel for="" value="" style="font-weight: bold;" />
+                    <h:outputLabel for="" value="" style="font-weight: bold;" />
+                    <h:outputLabel for="" value="" style="font-weight: bold;" />
+
+
+                </p:tab>
+
+                <p:tab title="Luminaria">
+
+                </p:tab>
+
+                <p:tab title="Bombillo">
+
+                </p:tab>
+
+                <p:tab title="Poste">
+
+                </p:tab>
+
+                <p:tab title="Medidor">
+
+                </p:tab>
+
+                <p:tab title="Mediciones" rendered="#{not empty inventarioControl.puntoLuz.luminaria or not empty inventarioControl.puntoLuz.transformador}">
+
+                </p:tab>
+
+                <p:tab title="Novedades">
+
+                </p:tab>
+                
+                <p:tab title="Mantenimiento">
+
+                </p:tab>
+            </p:tabView>
+
+
+        </h:form>
+
+    </p:dialog>
+
+</html>
+

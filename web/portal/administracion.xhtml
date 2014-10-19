@@ -23,18 +23,42 @@
                 </p:layoutUnit>
 
                 <p:layoutUnit id="layoutUnitMenuAdministracion" position="west" size="25%" header="Menú principal" style="text-align: center;">
-                    <p:menu style="border: none; width: 99%;">
-                        <p:menuitem value="Puntos de luz" />
-                        <p:menuitem value="Incidentes reportados" />
-                        <p:menuitem value="Usuarios" />
-                        <p:menuitem value="Estadísticas" />
+                    <p:menu style="border: none; width: 100%;">
+                        <p:menuitem value="Puntos de luz" action="#{administracionControl.inicializarPuntosLuz}" update="panelGroupAdministracion" />
+                        <p:menuitem value="Incidentes reportados" action="#{administracionControl.inicializarIncidentesReportados}" update="panelGroupAdministracion" />
+                        <p:menuitem value="Usuarios" action="#{administracionControl.inicializarAdministracionUsuarios}" update="panelGroupAdministracion" />
+                        <p:menuitem value="Estadísticas" action="#{administracionControl.inicializarEstadisticas}" update="panelGroupAdministracion" />
                     </p:menu>
                 </p:layoutUnit>
 
-                <p:layoutUnit id="layoutUnitAdministracion" position="center">
-                    
+                <p:layoutUnit id="layoutUnitAdministracion" position="center" size="75%">
+                    <h:panelGroup id="panelGroupAdministracion" style="width: 100%;">
+                        <h:panelGrid id="panelGridAdministracionPuntosLuz" rendered="#{administracionControl.opcion == 1}" width="100%">
+                            <ui:include src="administracion/puntosLuz.xhtml" />
+                        </h:panelGrid>
+                        
+                        <h:panelGrid id="panelGridIncidentesReportados" rendered="#{administracionControl.opcion == 2}" width="100%">
+                            <ui:include src="administracion/incidentesPuntoLuz.xhtml" />
+                        </h:panelGrid>
+                        
+                        <h:panelGrid id="panelGridAdministracionUsuarios" rendered="#{administracionControl.opcion == 3}" width="100%">
+                            <ui:include src="administracion/administracionUsuarios.xhtml" />
+                        </h:panelGrid>
+                        
+                        <h:panelGrid id="panelGridEstadisticas" rendered="#{administracionControl.opcion == 4}" width="100%">
+                            <ui:include src="administracion/estadisticas.xhtml" />
+                        </h:panelGrid>
+                        
+                        <h:panelGrid id="panelGridParametricas" rendered="#{administracionControl.opcion == 5}" width="100%">
+                            <ui:include src="administracion/parametricas.xhtml" />
+                        </h:panelGrid>
+                    </h:panelGroup>
                 </p:layoutUnit>
             </p:layout>
         </h:form>
+
+        <ui:include src="modal/detallePuntoLuz.xhtml" />
+        <ui:include src="modal/reportarIncidente.xhtml" />
+        <ui:include src="modal/detalleIncidente.xhtml" />
     </h:body>
 </html>

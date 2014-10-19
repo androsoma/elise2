@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"        
+      contentType="text/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:dialog id="dialogReportarIncidente" header="Reportar incidente" widgetVar="dialogReportarIncidente"
+              closable="true" modal="true" resizable="false" draggable="false">
+        <h:form id="formReportarIncidente">
+            <h:panelGrid columns="1" width="100%">
+                <h:outputLabel value="Punto seleccionado" for="outputTextPuntoSelecIncidente" style="font-weight: bold;" />
+                <h:outputText id="outputTextPuntoSelecIncidente" value="#{administracionControl.puntoLuzSeleccionado.ubicacionPunto.direccion}"/>
+               
+                <p:spacer />
+                <h:outputLabel for="selectOneMenuAdminRegistroTipoIncidente" value="Tipo incidente:" style="font-weight: bold;" />
+                <p:selectOneMenu id="selectOneMenuAdminRegistroTipoIncidente" value="#{administracionControl.incidente.tipoIncidente.id}">
+                    <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                    <f:selectItems value="#{administracionControl.tiposIndicentes}" var="incidente" itemLabel="#{incidente.descripcion}" itemValue="#{incidente.id}" />
+                </p:selectOneMenu>
+                
+                <p:spacer />
+                <h:outputLabel for="inputTextareaAdminObservaciones" value="Observaciones" style="font-weight: bold;"  />
+                <p:inputTextarea id="inputTextareaAdminObservaciones" rows="5" value="#{administracionControl.incidente.observaciones}" style="width: 95%;" />
+                
+                <p:commandButton value="Registrar incidente" action="#{administracionControl.guardarIncidenteAdministracion}" oncomplete="PF('dialogReportarIncidente').hide();" />
+            </h:panelGrid>
+        </h:form>
+    </p:dialog>
+</html>

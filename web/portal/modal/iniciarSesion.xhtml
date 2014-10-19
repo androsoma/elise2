@@ -8,6 +8,8 @@
               closeOnEscape="true">
         <h:form id="formIniciarSesion">
             <h:panelGrid columns="1" width="100%">
+                <h:outputText value="#{administracionControl.mensajeValidacion}" style="color: red; font-weight: bold; font-size: 9pt;"
+                              rendered="#{not empty administracionControl.mensajeValidacion}" />
                 <h:outputLabel for="inputTextNombreUsuario"  value="Nombre de suario:"/>
                 <p:inputText id="inputTextNombreUsuario" value="#{administracionControl.usuarioAutenticado.nombreUsuario}"
                              required="true" requiredMessage="Debe especificar un nombre de usuario." style="width: 100%;" />
@@ -18,7 +20,7 @@
                             required="true" requiredMessage="Debe especificar una contraseña." style="width: 100%;" />
                 <p:message for="passwordContrasenaUsuario" />
                 <br />
-                <p:commandButton value="Ingresar" action="administracion" actionListener="#{administracionControl.autenticarUsuario}" update="formIniciarSesion" />
+                <p:commandButton value="Ingresar" action="#{administracionControl.autenticarUsuario}" update="formIniciarSesion" />
             </h:panelGrid>
         </h:form> 
     </p:dialog>

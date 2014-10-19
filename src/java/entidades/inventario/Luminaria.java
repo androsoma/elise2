@@ -7,6 +7,7 @@ package entidades.inventario;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +17,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -79,9 +82,14 @@ public class Luminaria implements Serializable {
     @JoinColumn(name = "fk_potencia")
     private Potencia potencia;
 
-    @ManyToOne(optional = true, fetch = FetchType.EAGER)
-    @JoinColumn(name = "fk_concentrador")
-    private Concentrador concentrador;
+    @ManyToMany
+    @JoinTable(
+            name = "LuminariaConcentrador",
+            joinColumns = {
+                @JoinColumn(name = "fk_luminaria", referencedColumnName = "id")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "fk_concentrador", referencedColumnName = "id")})
+    private List<Concentrador> concentradores;
 
     @Column(name = "altura")
     private float altura;
@@ -171,12 +179,12 @@ public class Luminaria implements Serializable {
         this.potencia = potencia;
     }
 
-    public Concentrador getConcentrador() {
-        return concentrador;
+    public List<Concentrador> getConcentradores() {
+        return concentradores;
     }
 
-    public void setConcentrador(Concentrador concentrador) {
-        this.concentrador = concentrador;
+    public void setConcentradores(List<Concentrador> concentradores) {
+        this.concentradores = concentradores;
     }
 
     public String getReferencia() {

@@ -6,7 +6,7 @@
 
 package entidades.mantenimiento;
 
-import entidades.inventario.Usuario;
+import entidades.inventario.Tercero;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -41,8 +41,8 @@ public class EstadoReporte implements Serializable {
     private TipoEstadoReporte tipoEstadoReporte;
     
     @ManyToOne
-    @JoinColumn(name = "fk_usuario", nullable = false)
-    private Usuario usuario;
+    @JoinColumn(name = "fk_tercero", nullable = false)
+    private Tercero tercero;
     
     @Temporal(javax.persistence.TemporalType.DATE)
     @Column(nullable = false)
@@ -72,12 +72,12 @@ public class EstadoReporte implements Serializable {
         this.tipoEstadoReporte = tipoEstadoReporte;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Tercero getTercero() {
+        return tercero;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setTercero(Tercero tercero) {
+        this.tercero = tercero;
     }
 
     public Date getFechaCambioEstado() {
@@ -110,7 +110,7 @@ public class EstadoReporte implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.mantenimiento.EstadoReporte[ id=" + id + " ]";
+        return tipoEstadoReporte.getDescripcion();
     }
     
 }

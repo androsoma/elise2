@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entidades.inventario;
 
 import java.io.Serializable;
@@ -15,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 
 /**
@@ -22,27 +23,34 @@ import javax.persistence.SequenceGenerator;
  * @author Yeison Osorio
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Usuario.findByUsuarioContrasena",
+            query = "SELECT u"
+            + " FROM Usuario u"
+            + " WHERE u.nombreUsuario = :nombreUsuario"
+            + "  AND u.contrasena = :contrasena")})
 public class Usuario implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @SequenceGenerator(name = "UsuarioSequence", sequenceName = "usuario_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "UsuarioSequence")
     private Long id;
-    
+
     @Column(length = 255, nullable = false)
     private String nombreUsuario;
-    
+
     @Column(length = 255, nullable = false)
     private String contrasena;
-    
+
     @ManyToOne(cascade = {CascadeType.REFRESH})
     @JoinColumn(name = "fk_tercero", nullable = false)
     private Tercero tercero;
-    
+
     @Column(length = 50, nullable = false)
     private String rol;
-    
+
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
     private boolean activo;
 
@@ -93,7 +101,7 @@ public class Usuario implements Serializable {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -116,7 +124,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return tercero.getNombres()+ " " + tercero.getApellidos();
+        return tercero.getNombres() + " " + tercero.getApellidos();
     }
-    
+
 }

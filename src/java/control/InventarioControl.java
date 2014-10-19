@@ -11,6 +11,7 @@ import ejb.inventario.BarrioFacade;
 import ejb.inventario.BombilloFacade;
 import ejb.inventario.BrazoLuminariaFacade;
 import ejb.inventario.ClasePrecisionFacade;
+import ejb.inventario.DepartamentoFacade;
 import ejb.inventario.FabricanteFacade;
 import ejb.inventario.FaseFacade;
 import ejb.inventario.FrecuenciaFacade;
@@ -33,6 +34,7 @@ import ejb.inventario.TipoTransformadorFacade;
 import ejb.inventario.TransformadorFacade;
 import ejb.inventario.UbicacionPuntoFacade;
 import ejb.inventario.VoltajeFacade;
+import ejb.mantenimiento.ZonaFacade;
 import entidades.inventario.AlturaPoste;
 import entidades.inventario.Arrancador;
 import entidades.inventario.Balasto;
@@ -40,6 +42,7 @@ import entidades.inventario.Barrio;
 import entidades.inventario.Bombillo;
 import entidades.inventario.BrazoLuminaria;
 import entidades.inventario.ClasePrecision;
+import entidades.inventario.Departamento;
 import entidades.inventario.Fabricante;
 import entidades.inventario.Fase;
 import entidades.inventario.Frecuencia;
@@ -63,6 +66,7 @@ import entidades.inventario.Transformador;
 import entidades.inventario.UbicacionPunto;
 import entidades.inventario.Usuario;
 import entidades.inventario.Voltaje;
+import entidades.mantenimiento.Zona;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +80,6 @@ import javax.inject.Named;
  *
  * @author Yeison Osorio
  */
-
 @ManagedBean
 @SessionScoped
 @Named("inventarioControl")
@@ -164,10 +167,6 @@ public class InventarioControl implements Serializable {
 
     @EJB
     @Inject
-    BarrioFacade barrioFacade;
-
-    @EJB
-    @Inject
     LuminariaFacade luminariaFacade;
 
     @EJB
@@ -176,7 +175,19 @@ public class InventarioControl implements Serializable {
 
     @EJB
     @Inject
+    DepartamentoFacade departamentoFacade;
+
+    @EJB
+    @Inject
     MunicipioFacade municipioFacade;
+
+    @EJB
+    @Inject
+    ZonaFacade zonaFacade;
+
+    @EJB
+    @Inject
+    BarrioFacade barrioFacade;
 
     @EJB
     @Inject
@@ -194,7 +205,10 @@ public class InventarioControl implements Serializable {
     @Inject
     MedidorEnergiaFacade medidorEnergiaFacade;
 
-    List<Barrio> barrios = null;
+    List<Departamento> departamentos = new ArrayList<>();
+    List<Municipio> municipios = new ArrayList<>();
+    List<Zona> zonas = new ArrayList<>();
+    List<Barrio> barrios = new ArrayList<>();
     List<TipoTransformador> tiposTransformador = null;
     List<Fabricante> fabricantes = null;
     List<TipoConexionTransformador> tiposConexionTransformador = null;
@@ -216,6 +230,10 @@ public class InventarioControl implements Serializable {
 
     private PuntoLuz puntoLuz;
     private Usuario usuario = new Usuario();
+    private Departamento departamento = new Departamento();
+    private Municipio municipio = new Municipio();
+    private Zona zona = new Zona();
+    private Barrio barrio = new Barrio();
 
     /**
      * Creates a new instance of InventarioControl
@@ -387,14 +405,6 @@ public class InventarioControl implements Serializable {
         this.faseFacade = faseFacade;
     }
 
-    public BarrioFacade getBarrioFacade() {
-        return barrioFacade;
-    }
-
-    public void setBarrioFacade(BarrioFacade barrioFacade) {
-        this.barrioFacade = barrioFacade;
-    }
-
     public LuminariaFacade getLuminariaFacade() {
         return luminariaFacade;
     }
@@ -411,12 +421,36 @@ public class InventarioControl implements Serializable {
         this.puntoLuzFacade = puntoLuzFacade;
     }
 
+    public DepartamentoFacade getDepartamentoFacade() {
+        return departamentoFacade;
+    }
+
+    public void setDepartamentoFacade(DepartamentoFacade departamentoFacade) {
+        this.departamentoFacade = departamentoFacade;
+    }
+
     public MunicipioFacade getMunicipioFacade() {
         return municipioFacade;
     }
 
     public void setMunicipioFacade(MunicipioFacade municipioFacade) {
         this.municipioFacade = municipioFacade;
+    }
+
+    public ZonaFacade getZonaFacade() {
+        return zonaFacade;
+    }
+
+    public void setZonaFacade(ZonaFacade zonaFacade) {
+        this.zonaFacade = zonaFacade;
+    }
+
+    public BarrioFacade getBarrioFacade() {
+        return barrioFacade;
+    }
+
+    public void setBarrioFacade(BarrioFacade barrioFacade) {
+        this.barrioFacade = barrioFacade;
     }
 
     public UbicacionPuntoFacade getUbicacionPuntoFacade() {
@@ -449,6 +483,30 @@ public class InventarioControl implements Serializable {
 
     public void setMedidorEnergiaFacade(MedidorEnergiaFacade medidorEnergiaFacade) {
         this.medidorEnergiaFacade = medidorEnergiaFacade;
+    }
+
+    public List<Departamento> getDepartamentos() {
+        return departamentos;
+    }
+
+    public void setDepartamentos(List<Departamento> departamentos) {
+        this.departamentos = departamentos;
+    }
+
+    public List<Municipio> getMunicipios() {
+        return municipios;
+    }
+
+    public void setMunicipios(List<Municipio> municipios) {
+        this.municipios = municipios;
+    }
+
+    public List<Zona> getZonas() {
+        return zonas;
+    }
+
+    public void setZonas(List<Zona> zonas) {
+        this.zonas = zonas;
     }
 
     public List<Barrio> getBarrios() {
@@ -613,6 +671,38 @@ public class InventarioControl implements Serializable {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Departamento getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(Departamento departamento) {
+        this.departamento = departamento;
+    }
+
+    public Municipio getMunicipio() {
+        return municipio;
+    }
+
+    public void setMunicipio(Municipio municipio) {
+        this.municipio = municipio;
+    }
+
+    public Zona getZona() {
+        return zona;
+    }
+
+    public void setZona(Zona zona) {
+        this.zona = zona;
+    }
+
+    public Barrio getBarrio() {
+        return barrio;
+    }
+
+    public void setBarrio(Barrio barrio) {
+        this.barrio = barrio;
     }
 
     public String inicializarPunto() {
@@ -948,7 +1038,7 @@ public class InventarioControl implements Serializable {
         if (puntoLuz.getMedidorEnergia().getClasePrecision().getId() == null) {
             puntoLuz.getMedidorEnergia().setClasePrecision(null);
         }
-        
+
         if (puntoLuz.getMedidorEnergia().getTipoConexionMedidor().getId() == null) {
             puntoLuz.getMedidorEnergia().setTipoConexionMedidor(null);
         }
@@ -987,9 +1077,96 @@ public class InventarioControl implements Serializable {
     public void imprimirUbicacion() {
         System.out.println("Latiud = " + puntoLuz.getUbicacionPunto().getLatittud());
         System.out.println("Longitud = " + puntoLuz.getUbicacionPunto().getLongitud());
-        
+
         System.out.println("Barrio = " + puntoLuz.getUbicacionPunto().getBarrio().getId());
         System.out.println("Barrio = " + puntoLuz.getUbicacionPunto().getMunicipio().getId());
         System.out.println("Barrio = " + puntoLuz.getUbicacionPunto().getDireccion());
+    }
+
+    public void buscarDepartamentos() {
+        departamentos.clear();
+        departamentos = departamentoFacade.findAll();
+    }
+
+    public void buscarMunicipiosPorDepartamento() {
+        municipios.clear();
+        municipios = municipioFacade.getMunicipiosByDepartamento(departamento.getId());
+    }
+
+    public void buscarZonasPorMunicipio() {
+        zonas.clear();
+        zonas = zonaFacade.getZonasByMunicipio(municipio.getId());
+    }
+
+    public void buscarBarriosPorZona() {
+        barrios.clear();
+        barrios = barrioFacade.getBarriosByZona(zona.getId());
+    }
+
+    public void cambioDepartamento() {
+        buscarMunicipiosPorDepartamento();
+
+        zonas.clear();
+        barrios.clear();
+
+        municipio = new Municipio();
+        zona = new Zona();
+        barrio = new Barrio();
+    }
+
+    public void cambioMunicipio() {
+        buscarZonasPorMunicipio();
+
+        barrios.clear();
+
+        zona = new Zona();
+        barrio = new Barrio();
+    }
+
+    public void cambioZona() {
+        buscarBarriosPorZona();
+
+        barrio = new Barrio();
+    }
+
+    public void procesarOpcionesUbicacionPunto() {
+        buscarDepartamentos();
+
+        if (puntoLuz.getUbicacionPunto().getMunicipio() != null) {
+            departamento = puntoLuz.getUbicacionPunto().getMunicipio().getDepartamento();
+            municipio = puntoLuz.getUbicacionPunto().getMunicipio();
+
+            buscarMunicipiosPorDepartamento();
+            buscarZonasPorMunicipio();
+
+            if (puntoLuz.getUbicacionPunto().getBarrio() != null) {
+                zona = puntoLuz.getUbicacionPunto().getBarrio().getZona();
+                barrio = puntoLuz.getUbicacionPunto().getBarrio();
+
+                buscarBarriosPorZona();
+            }
+        }
+    }
+
+    public void guardarUbicacion() {
+        if (municipio.getId() == null) {
+            puntoLuz.getUbicacionPunto().setMunicipio(null);
+        } else {
+            municipio = municipioFacade.find(municipio.getId());
+            puntoLuz.getUbicacionPunto().setMunicipio(municipio);
+        }
+
+        if (barrio.getId() == null) {
+            puntoLuz.getUbicacionPunto().setBarrio(null);
+        } else {
+            barrio = barrioFacade.find(barrio.getId());
+            puntoLuz.getUbicacionPunto().setBarrio(barrio);
+        }
+
+        if (puntoLuz.getUbicacionPunto().getId() == null) {
+            ubicacionPuntoFacade.create(puntoLuz.getUbicacionPunto());
+        } else {
+            ubicacionPuntoFacade.edit(puntoLuz.getUbicacionPunto());
+        }
     }
 }

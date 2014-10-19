@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entidades.inventario;
 
 import java.io.Serializable;
@@ -18,29 +17,33 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 /**
- * <p>representa un municipio de un departamento</p>
- * 
+ * <p>
+ * representa un municipio de un departamento</p>
+ *
  * @author Cristian Gutierrez
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "Municipio.findByDepartamento", 
+    @NamedQuery(name = "Municipio.findByDepartamento",
             query = "SELECT m"
-                    + " FROM Municipio m"
-                    + " JOIN m.departamento d"
-                    + " WHERE d.id = :codigoDepartamento ")})
+            + " FROM Municipio m"
+            + " JOIN m.departamento d"
+            + " WHERE d.id = :idDepartamento"
+            + " ORDER BY m.nombre")})
+
 public class Municipio implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @Column(length = 5, nullable = false)
     private String codigodane;
-    
-    @Column (length = 50, nullable = false)
+
+    @Column(length = 50, nullable = false)
     private String nombre;
-    
+
     @ManyToOne
     @JoinColumn(name = "fk_departamento", nullable = false)
     private Departamento departamento;
@@ -76,8 +79,6 @@ public class Municipio implements Serializable {
     public void setDepartamento(Departamento departamento) {
         this.departamento = departamento;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -102,6 +103,6 @@ public class Municipio implements Serializable {
     @Override
     public String toString() {
         return nombre;
-                
-    }    
+
+    }
 }

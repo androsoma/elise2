@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ejb.inventario;
 
 import entidades.inventario.Municipio;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -17,6 +18,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class MunicipioFacade extends AbstractFacade<Municipio> {
+
     @PersistenceContext(unitName = "elisePU")
     private EntityManager em;
 
@@ -28,5 +30,12 @@ public class MunicipioFacade extends AbstractFacade<Municipio> {
     public MunicipioFacade() {
         super(Municipio.class);
     }
-    
+
+    public List<Municipio> getMunicipiosByDepartamento(Long idDepartamento) {
+        Query query = em.createNamedQuery("Municipio.findByDepartamento");
+        query.setParameter("idDepartamento", idDepartamento);
+
+        return query.getResultList();
+    }
+
 }

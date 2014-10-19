@@ -5,12 +5,14 @@
  */
 package control;
 
+import ejb.inventario.ConfiguracionFacade;
 import ejb.inventario.UsuarioFacade;
 import ejb.mantenimiento.AccionCierreFacade;
 import ejb.mantenimiento.AccionCierreReporteFacade;
 import ejb.mantenimiento.EstadoReporteFacade;
 import ejb.mantenimiento.ReportePuntoLuzFacade;
 import ejb.mantenimiento.TipoEstadoReporteFacade;
+import entidades.inventario.Configuracion;
 import entidades.inventario.Usuario;
 import entidades.mantenimiento.AccionCierre;
 import entidades.mantenimiento.AccionCierreReporte;
@@ -66,7 +68,11 @@ public class MantenimientoControl {
     @EJB
     @Inject
     private EstadoReporteFacade estadoReporteFacade;
-
+    
+    @EJB
+    @Inject
+    private ConfiguracionFacade configuracionFacade;
+    
     /**
      * Creates a new instance of MantenimientoControl
      */
@@ -177,11 +183,24 @@ public class MantenimientoControl {
         this.estadoReporteFacade = estadoReporteFacade;
     }
 
+    public ConfiguracionFacade getConfiguracionFacade() {
+        return configuracionFacade;
+    }
+
+    public void setConfiguracionFacade(ConfiguracionFacade configuracionFacade) {
+        this.configuracionFacade = configuracionFacade;
+    }
+    
+    public String obtenerValorParametroConfiguracion(String parametro) {
+        Configuracion parametroConfiguracion = configuracionFacade.getConfiguracionByNombre(parametro);
+        
+        return parametroConfiguracion.getValor();
+    }
+
     public void cargarIncidentesConfirmados() {
         incidentes = new ArrayList<>();
 
-        //Consultar incidentes en TipoEstadoReporte confirmados.
-        incidentes = reportePuntoLuzFacade.consultarPorTipoEstadoReporte(2L); 
+        incidentes = reportePuntoLuzFacade.consultarPorTipoEstadoReporte(Long.valueOf(obtenerValorParametroConfiguracion("identificadorEstadoConfirmado"))); 
     }
 
     public void seleccionarIncidente(ReportePuntoLuz incidenteSelccionado) {
@@ -194,26 +213,31 @@ public class MantenimientoControl {
     }
 
     public void cerrarReporte() {
-        for (String accionCierre : accionesSeleccionadas) {
+        Usuario usuario = usuarioFacade.find(1L); //Cambiar
+        
+        for (String accionCierre : accionesCierreSeleccionadas) {
             AccionCierreReporte accionCierreReporte = new AccionCierreReporte();
-
+            
             accionCierreReporte.setReportePuntoLuz(reportePuntoLuzSeleccionado);
             accionCierreReporte.setAccionCierre(accionCierreFacade.find(Long.valueOf(accionCierre)));
+            accionCierreReporte.setUsuario(usuario);
             accionCierreReporte.setFechaRegistro(new Date());
 
             accionCierreReporteFacade.create(accionCierreReporte);
         }
 
         TipoEstadoReporte tipoEstadoReporte = tipoEstadoReporteFacade.find(3L);
-        Usuario usuario = usuarioFacade.find(1L); //Cambiar
-
+        
         EstadoReporte estadoReporte = new EstadoReporte();
         estadoReporte.setReportePuntoLuz(reportePuntoLuzSeleccionado);
         estadoReporte.setTipoEstadoReporte(tipoEstadoReporte);
-        estadoReporte.setUsuario(usuario);
+        estadoReporte.setTercero(usuario.getTercero());
         estadoReporte.setFechaCambioEstado(new Date());
         
         estadoReporteFacade.create(estadoReporte);
+        
+        reportePuntoLuzSeleccionado.setTipoEstadoReporte(tipoEstadoReporte);
+        reportePuntoLuzFacade.edit(reportePuntoLuzSeleccionado);
         
         cargarIncidentesConfirmados();
     }

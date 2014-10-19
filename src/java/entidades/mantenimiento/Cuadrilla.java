@@ -78,7 +78,7 @@ public class Cuadrilla implements Serializable {
 
     @Override
     public String toString() {
-        return zona.getNombreZona();
+        return descripcion;
     }
     
 }

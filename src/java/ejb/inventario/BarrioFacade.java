@@ -7,9 +7,11 @@
 package ejb.inventario;
 
 import entidades.inventario.Barrio;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +29,13 @@ public class BarrioFacade extends AbstractFacade<Barrio> {
 
     public BarrioFacade() {
         super(Barrio.class);
+    }
+    
+    public List<Barrio> getBarriosByZona(Long idZona) {
+        Query query = em.createNamedQuery("Barrio.findByZona");
+        query.setParameter("idZona", idZona);
+        
+        return query.getResultList();
     }
     
 }

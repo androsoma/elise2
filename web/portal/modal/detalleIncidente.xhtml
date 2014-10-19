@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"        
+      contentType="text/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:dialog id="dialogDetalleIncidente" header="Detalle incidente" widgetVar="dialogDetalleIncidente"
+              closable="true" modal="true" resizable="false" draggable="false">
+        <h:form id="formDetalleIncidente">
+            <h:panelGrid columns="1" width="100%">
+                <h:outputLabel for="outputTextCiudadano" value="Ciudadano que reporta:" style="font-weight: bold;" />
+                <h:outputText id="outputTextCiudadano" value="#{administracionControl.incidenteSeleccionado.tercero.nombres} #{administracionControl.incidenteSeleccionado.tercero.apellidos}" style="width: 100%;" />
+                <h:outputText id="outputTextCorreoCiudadano" value="#{administracionControl.incidenteSeleccionado.tercero.email}" style="width: 100%;" />
+                
+                <p:spacer />
+                <h:outputLabel for="outputTextDireccionDetalle" value="Ubicación:" style="font-weight: bold;" />
+                <h:outputText id="outputTextDireccionDetalle" value="#{administracionControl.incidenteSeleccionado.puntoLuz.ubicacionPunto.direccion}" style="width: 100%;" />
+                <h:outputText id="outputTextUbicacionIncidenteDetalle"
+                              value="#{administracionControl.incidenteSeleccionado.puntoLuz.ubicacionPunto.barrio.nombre}, #{administracionControl.incidenteSeleccionado.puntoLuz.ubicacionPunto.municipio.nombre}" style="width: 100%;" />
+                <p:spacer />
+                <h:outputLabel for="outputTextTipoIncidenteDetalle" value="Tipo incidente:" style="font-weight: bold;" />
+                <h:outputText id="outputTextTipoIncidenteDetalle" value="#{administracionControl.incidenteSeleccionado.tipoIncidente.descripcion}" style="width: 100%;" />
+                
+                <p:spacer />
+                <h:outputLabel for="outputTextObservaciones" value="Observaciones:" style="font-weight: bold;" />
+                <h:outputText id="outputTextObservaciones" value="#{administracionControl.incidenteSeleccionado.observaciones}" style="width: 100%;" />
+                
+                <p:spacer />
+                <p:commandButton value="Confirmar" action="#{administracionControl.confirmarIncidente}" oncomplete="PF('dialogDetalleIncidente').hide();" update=":formAdministracion:dataTableIncidentesReportados"  />
+            </h:panelGrid>
+        </h:form>
+    </p:dialog>
+</html>

@@ -6,6 +6,7 @@
 package entidades.mantenimiento;
 
 import entidades.inventario.PuntoLuz;
+import entidades.inventario.Tercero;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.CascadeType;
@@ -18,7 +19,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 
@@ -36,9 +36,8 @@ import javax.persistence.Temporal;
             + " WHERE ter.id = 1"),
     @NamedQuery(name = "ReportePuntoLuz.findByTipoEstadoReporte",
             query = "SELECT rpl"
-            + " FROM EstadoReporte er"
-            + " JOIN er.reportePuntoLuz rpl"
-            + " JOIN er.tipoEstadoReporte ter"
+            + " FROM ReportePuntoLuz rpl"
+            + " JOIN rpl.tipoEstadoReporte ter "
             + " WHERE ter.id = :idTipoEstadoReporte")})
 
 public class ReportePuntoLuz implements Serializable {
@@ -53,9 +52,9 @@ public class ReportePuntoLuz implements Serializable {
     @Column
     private String codigo;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "fk_ciudadano", nullable = false)
-    private Ciudadano ciudadano;
+    @ManyToOne
+    @JoinColumn(name = "fk_tercero", nullable = false)
+    private Tercero tercero;
 
     @ManyToOne
     @JoinColumn(name = "fk_puntoluz", nullable = false)
@@ -64,6 +63,10 @@ public class ReportePuntoLuz implements Serializable {
     @ManyToOne
     @JoinColumn(name = "fk_tipoincidente", nullable = false)
     private TipoIncidente tipoIncidente;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_tipoestadoreporte", nullable = false)
+    private TipoEstadoReporte tipoEstadoReporte;
 
     @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -88,12 +91,12 @@ public class ReportePuntoLuz implements Serializable {
         this.codigo = codigo;
     }
 
-    public Ciudadano getCiudadano() {
-        return ciudadano;
+    public Tercero getTercero() {
+        return tercero;
     }
 
-    public void setCiudadano(Ciudadano ciudadano) {
-        this.ciudadano = ciudadano;
+    public void setTercero(Tercero tercero) {
+        this.tercero = tercero;
     }
 
     public PuntoLuz getPuntoLuz() {
@@ -110,6 +113,14 @@ public class ReportePuntoLuz implements Serializable {
 
     public void setTipoIncidente(TipoIncidente tipoIncidente) {
         this.tipoIncidente = tipoIncidente;
+    }
+
+    public TipoEstadoReporte getTipoEstadoReporte() {
+        return tipoEstadoReporte;
+    }
+
+    public void setTipoEstadoReporte(TipoEstadoReporte tipoEstadoReporte) {
+        this.tipoEstadoReporte = tipoEstadoReporte;
     }
 
     public Date getFechaIncidencia() {

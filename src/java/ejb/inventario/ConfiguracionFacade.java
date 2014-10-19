@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ejb.inventario;
 
 import entidades.inventario.Configuracion;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -17,6 +17,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class ConfiguracionFacade extends AbstractFacade<Configuracion> {
+
     @PersistenceContext(unitName = "elisePU")
     private EntityManager em;
 
@@ -28,5 +29,11 @@ public class ConfiguracionFacade extends AbstractFacade<Configuracion> {
     public ConfiguracionFacade() {
         super(Configuracion.class);
     }
-    
+
+    public Configuracion getConfiguracionByNombre(String nombre) {
+        Query query = em.createNamedQuery("Configuracion.findByNombre");
+        query.setParameter("nombre", nombre);
+
+        return (Configuracion) query.getSingleResult();
+    }
 }

@@ -3,16 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entidades.inventario;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
@@ -22,40 +24,37 @@ import javax.persistence.SequenceGenerator;
  */
 @Entity
 public class PuntoLuz implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @SequenceGenerator(name = "PuntoLuzSequence", sequenceName = "punto_luz_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PuntoLuzSequence")
     private Long id;
-    
+
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "fk_ubicacionpunto", nullable = false)
     private UbicacionPunto ubicacionPunto;
-    
+
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "fk_transformador", nullable = true)
     private Transformador transformador;
-    
+
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "fk_luminaria", nullable = true)
     private Luminaria luminaria;
-    
+
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "fk_bombillo", nullable = true)
     private Bombillo bombillo;
-    
+
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "fk_poste", nullable = true)
     private Poste poste;
-    
+
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "fk_medidorenergia", nullable = true)
     private MedidorEnergia medidorEnergia;
-    
-    @OneToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "fk_concentrador", nullable = true)
-    private Concentrador concentrador;
 
     public Long getId() {
         return id;
@@ -113,14 +112,6 @@ public class PuntoLuz implements Serializable {
         this.medidorEnergia = medidorEnergia;
     }
 
-    public Concentrador getConcentrador() {
-        return concentrador;
-    }
-
-    public void setConcentrador(Concentrador concentrador) {
-        this.concentrador = concentrador;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -145,5 +136,5 @@ public class PuntoLuz implements Serializable {
     public String toString() {
         return "entidades.inventario.PuntoLuz[ id=" + id + " ]";
     }
-    
+
 }

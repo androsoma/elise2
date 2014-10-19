@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entidades.inventario;
 
 import java.io.Serializable;
@@ -12,36 +11,46 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 
 /**
  *
- * @author LENOVO
+ * @author Yeison Osorio
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Tercero.findByNombreAndCorreo",
+            query = "SELECT t"
+            + " FROM Tercero t"
+            + " WHERE t.nombres = :nombres"
+            + "  AND t.apellidos = :apellidos"
+            + "  AND t.email = :correo")})
 public class Tercero implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @SequenceGenerator(name = "TerceroSequence", sequenceName = "tercero_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TerceroSequence")
     private Long id;
-    
+
     @Column(nullable = false)
     private String nombres;
-    
+
     @Column(nullable = false)
     private String apellidos;
-    
+
     @Column
     private String documento;
-    
+
     @Column
     private String celular;
-    
+
     @Column
     private String telefonos;
-    
+
     @Column
     private String email;
 
@@ -125,5 +134,5 @@ public class Tercero implements Serializable {
     public String toString() {
         return "entidades.inventario.Tercero[ id=" + id + " ]";
     }
-    
+
 }

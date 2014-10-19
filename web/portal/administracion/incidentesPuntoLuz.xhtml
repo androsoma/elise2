@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <f:facet name="header">
+        <h:outputText value="Incientes reportados" />
+    </f:facet>
+
+    <p:dataTable id="dataTableIncidentesReportados" value="#{administracionControl.incidentesReportados}" var="incidente"
+                 emptyMessage="No hay incidentes reportados." paginator="true" rows="30">
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Municipio" />
+            </f:facet>
+
+            <h:outputText value="#{incidente.puntoLuz.ubicacionPunto.municipio.nombre}, #{incidente.puntoLuz.ubicacionPunto.municipio.departamento.nombre}"/>
+        </p:column>
+
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Barrio" />
+            </f:facet>
+
+            <h:outputText value="#{incidente.puntoLuz.ubicacionPunto.barrio.nombre}" />
+        </p:column>
+
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Dirección" />
+            </f:facet>
+
+            <h:outputText value="#{incidente.puntoLuz.ubicacionPunto.direccion}" />
+        </p:column>
+
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Tipo incidente" />
+            </f:facet>
+
+            <h:outputText value="#{incidente.tipoIncidente.descripcion}" />
+        </p:column>
+
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Fecha de reporte" />
+            </f:facet>
+
+            <h:outputText value="#{incidente.fechaIncidencia}">
+                <f:convertDateTime pattern="dd-MM-yyyy HH:mm" />
+            </h:outputText>
+        </p:column>
+
+        <p:column style="text-align: center;">
+            <f:facet name="header">
+                <h:outputText value="Acciones"/>
+            </f:facet>
+
+            <p:commandButton value="Ver incidente" onclick="PF('dialogDetalleIncidente').show();" update=":formDetalleIncidente">
+                <f:setPropertyActionListener value="#{incidente}" target="#{administracionControl.incidenteSeleccionado}" />
+            </p:commandButton>
+        </p:column>
+    </p:dataTable>
+</html>
