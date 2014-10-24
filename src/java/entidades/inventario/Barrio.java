@@ -29,6 +29,10 @@ import javax.persistence.SequenceGenerator;
             + " FROM Barrio b"
             + " JOIN b.zona z"
             + " WHERE z.id = :idZona"
+            + " ORDER BY b.nombre"),
+    @NamedQuery(name = "Barrio.buscarTodos",
+            query = "SELECT b"
+            + " FROM Barrio b"
             + " ORDER BY b.nombre")})
 public class Barrio implements Serializable {
 

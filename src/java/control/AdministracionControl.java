@@ -1,6 +1,7 @@
 package control;
 
 import ejb.inventario.ConfiguracionFacade;
+import ejb.inventario.MedicionFacade;
 import ejb.inventario.PuntoLuzFacade;
 import ejb.inventario.TerceroFacade;
 import ejb.inventario.UsuarioFacade;
@@ -12,6 +13,7 @@ import ejb.mantenimiento.TipoIncidenteFacade;
 import entidades.inventario.Barrio;
 import entidades.inventario.Configuracion;
 import entidades.inventario.Departamento;
+import entidades.inventario.Medicion;
 import entidades.inventario.Municipio;
 import entidades.inventario.PuntoLuz;
 import entidades.inventario.Tercero;
@@ -45,10 +47,15 @@ import org.primefaces.event.map.OverlaySelectEvent;
 import org.primefaces.extensions.model.timeline.TimelineEvent;
 import org.primefaces.extensions.model.timeline.TimelineModel;
 import org.primefaces.model.UploadedFile;
+import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.LineChartModel;
+import org.primefaces.model.chart.LineChartSeries;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
 import org.primefaces.model.map.Marker;
+import sun.management.ManagementFactoryHelper;
 
 /**
  *
@@ -81,6 +88,8 @@ public class AdministracionControl implements Serializable {
     private List<Municipio> municipios;
     private List<Barrio> barrios;
     private List<Zona> zonas;
+    private List<Medicion> mediciones;
+    private LineChartModel modeloLineChart = new LineChartModel();
     private TimelineModel modeloTimeline;
 
     @ManagedProperty(name = "inventarioControl", value = "#{inventarioControl}")
@@ -121,6 +130,10 @@ public class AdministracionControl implements Serializable {
     @EJB
     @Inject
     private UsuarioFacade usuarioFacade;
+    
+    @EJB
+    @Inject
+    private MedicionFacade medicionFacade;
 
     public AdministracionControl() {
 
@@ -308,6 +321,22 @@ public class AdministracionControl implements Serializable {
         this.zonas = zonas;
     }
 
+    public List<Medicion> getMediciones() {
+        return mediciones;
+    }
+
+    public void setMediciones(List<Medicion> mediciones) {
+        this.mediciones = mediciones;
+    }
+
+    public LineChartModel getModeloLineChart() {
+        return modeloLineChart;
+    }
+
+    public void setModeloLineChart(LineChartModel modeloLineChart) {
+        this.modeloLineChart = modeloLineChart;
+    }
+
     public TimelineModel getModeloTimeline() {
         return modeloTimeline;
     }
@@ -394,6 +423,14 @@ public class AdministracionControl implements Serializable {
 
     public void setUsuarioFacade(UsuarioFacade usuarioFacade) {
         this.usuarioFacade = usuarioFacade;
+    }
+
+    public MedicionFacade getMedicionFacade() {
+        return medicionFacade;
+    }
+
+    public void setMedicionFacade(MedicionFacade medicionFacade) {
+        this.medicionFacade = medicionFacade;
     }
 
     public void generarMapaCiudadano() {
@@ -624,6 +661,7 @@ public class AdministracionControl implements Serializable {
         
         inicializarMantenimientoPuntoLuz();
         generarTimelinePuntoLuz();
+        consultarMedicionesLuminaria();
     }
 
     public void generarTimelinePuntoLuz() {
@@ -666,5 +704,28 @@ public class AdministracionControl implements Serializable {
         inicializarMantenimientoPuntoLuz();
 
     }
+    
+    public void consultarMedicionesLuminaria(){
+        mediciones = medicionFacade.buscarPorLuminaria(puntoLuzSeleccionado.getLuminaria().getId());
+        modeloLineChart.clear();
+        modeloLineChart = inicializarCategoryModel();
+        
+    }
+    
+    private LineChartModel inicializarCategoryModel() {
+        LineChartModel modelo = new LineChartModel();
+        
+        ChartSeries serie1 = new LineChartSeries();
+        serie1.setLabel("Voltaje");
+        
+        for (Medicion medicion : mediciones) {            
+            serie1.set(medicion.getId(), medicion.getVoltaje());
+        }
+        
+        modelo.addSeries(serie1);
+        
+        return modelo;
+    }
+    
 
 }

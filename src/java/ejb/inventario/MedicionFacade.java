@@ -7,9 +7,11 @@
 package ejb.inventario;
 
 import entidades.inventario.Medicion;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +29,14 @@ public class MedicionFacade extends AbstractFacade<Medicion> {
 
     public MedicionFacade() {
         super(Medicion.class);
+    }
+    
+    public List<Medicion> buscarPorLuminaria(Long idLuminaria) {
+        Query query = em.createNamedQuery("Medicion.buscarPorLuminaria");
+        
+        query.setParameter("idLuminaria", idLuminaria);
+        
+        return query.getResultList();
     }
     
 }

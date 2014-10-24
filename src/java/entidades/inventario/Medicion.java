@@ -26,14 +26,11 @@ import javax.persistence.Temporal;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "Medicion.findMedicionLuminariaByMunicipio",
+    @NamedQuery(name = "Medicion.buscarPorLuminaria",
             query = "SELECT med"
-            + " FROM Medicion med, Luminaria lum, PuntoLuz pl"
-            + " WHERE med.luminaria.id = lum.id "
-            + "  AND lum.id = pl.luminaria.id"
-            + "  AND pl.ubicacionPunto.municipio.id = :codigoMunicipio"
-            + "  AND med.fechaMedicion >= :fechaInicioMedicion "
-            + "  AND med.fechaMedicion <= :fechaFinalizacionMedicion ")})
+            + " FROM Medicion med"
+            + " JOIN med.luminaria l"
+            + " WHERE l.id = :idLuminaria")})
 public class Medicion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -208,6 +205,10 @@ public class Medicion implements Serializable {
     @Override
     public String toString() {
         return "entidades.inventario.Medicion[ id=" + id + " ]";
+    }
+    
+    public String getDiaHora() {
+        return getDia() + ": " + getHora() + ":" + getMinuto();
     }
 
 }

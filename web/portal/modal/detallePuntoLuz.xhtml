@@ -336,7 +336,7 @@
                 </p:tab>
 
                 <p:tab title="Mediciones" rendered="#{not empty inventarioControl.puntoLuz.luminaria or not empty inventarioControl.puntoLuz.transformador and false}">
-
+                    <p:chart type="line" model="#{administracionControl.modeloLineChart}" style="height: 300px;" />
                 </p:tab>
 
                 <p:tab title="Novedades">

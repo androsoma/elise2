@@ -38,4 +38,10 @@ public class BarrioFacade extends AbstractFacade<Barrio> {
         return query.getResultList();
     }
     
+     public List<Barrio> buscarTodos() {
+        Query query = em.createNamedQuery("Barrio.buscarTodos");
+        
+        return query.getResultList();
+    }
+    
 }

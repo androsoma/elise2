@@ -710,7 +710,7 @@ public class InventarioControl implements Serializable {
     public String inicializarPunto() {
         System.out.println("Entré a inicializar punto.");
         barrios = new ArrayList<>();
-        barrios = getBarrioFacade().findAll();
+        barrios = getBarrioFacade().buscarTodos();
 
         puntoLuz = new PuntoLuz();
 
@@ -919,7 +919,29 @@ public class InventarioControl implements Serializable {
     public void guardarPuntoLuz() {
         verificarSeleccionParametricas();
 
+        if (puntoLuz.getUbicacionPunto().getMunicipio() != null) {
+            puntoLuz.getUbicacionPunto().setMunicipio(municipioFacade.find(puntoLuz.getUbicacionPunto().getMunicipio().getId()));
+        }
+
+        if (puntoLuz.getUbicacionPunto().getBarrio() != null) {
+            puntoLuz.getUbicacionPunto().setBarrio(barrioFacade.find(puntoLuz.getUbicacionPunto().getBarrio().getId()));
+        }
+
         getPuntoLuzFacade().create(puntoLuz);
+        
+        barrios.clear();
+        
+        barrios = barrioFacade.buscarTodos();
+    }
+
+    public void inicializarLocalidades() {
+        departamento = new Departamento();
+        municipio = municipioFacade.find(1L);
+        zona = new Zona();
+        barrio = new Barrio();
+
+        buscarZonasPorMunicipio();
+        barrios = new ArrayList<>();
     }
 
     private void verificarSeleccionParametricasUbicacion() {
