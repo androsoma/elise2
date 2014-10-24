@@ -71,8 +71,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -914,19 +916,13 @@ public class InventarioControl implements Serializable {
         return "pm:nuevaaccion";
     }
 
-    public String guardarLuminaria() {
-        getLuminariaFacade().create(getPuntoLuz().getLuminaria());
-
-        return null;
-    }
-
     public void guardarPuntoLuz() {
         verificarSeleccionParametricas();
 
         getPuntoLuzFacade().create(puntoLuz);
     }
 
-    private void verificarSeleccionParametricas() {
+    private void verificarSeleccionParametricasUbicacion() {
         if (puntoLuz.getUbicacionPunto().getBarrio().getId() == null) {
             puntoLuz.getUbicacionPunto().setBarrio(null);
         }
@@ -934,7 +930,9 @@ public class InventarioControl implements Serializable {
         if (puntoLuz.getUbicacionPunto().getMunicipio().getId() == null) {
             puntoLuz.getUbicacionPunto().setMunicipio(null);
         }
+    }
 
+    private void verificarSeleccionParametricasTransformador() {
         if (puntoLuz.getTransformador().getTipoTransformador().getId() == null) {
             puntoLuz.getTransformador().setTipoTransformador(null);
         }
@@ -966,7 +964,9 @@ public class InventarioControl implements Serializable {
         if (puntoLuz.getTransformador().getPotencia().getId() == null) {
             puntoLuz.getTransformador().setPotencia(null);
         }
+    }
 
+    private void verificarSeleccionParametricasLuminaria() {
         if (puntoLuz.getLuminaria().getArrancador().getFabricante().getId() == 0) {
             puntoLuz.getLuminaria().getArrancador().setFabricante(null);
         }
@@ -998,7 +998,9 @@ public class InventarioControl implements Serializable {
         if (puntoLuz.getLuminaria().getPotencia().getId() == null) {
             puntoLuz.getLuminaria().setPotencia(null);
         }
+    }
 
+    private void verificarSeleccionParametricasBombillo() {
         if (puntoLuz.getBombillo().getFabricante().getId() == 0) {
             puntoLuz.getBombillo().setFabricante(null);
         }
@@ -1010,7 +1012,9 @@ public class InventarioControl implements Serializable {
         if (puntoLuz.getBombillo().getPotencia().getId() == null) {
             puntoLuz.getBombillo().setPotencia(null);
         }
+    }
 
+    private void verificarSeleccionParametricasPoste() {
         if (puntoLuz.getPoste().getFabricante().getId() == 0) {
             puntoLuz.getPoste().setFabricante(null);
         }
@@ -1022,7 +1026,9 @@ public class InventarioControl implements Serializable {
         if (puntoLuz.getPoste().getAlturaPoste().getId() == null) {
             puntoLuz.getPoste().setAlturaPoste(null);
         }
+    }
 
+    private void verificarSeleccionParametricasMedidor() {
         if (puntoLuz.getMedidorEnergia().getFabricante().getId() == 0) {
             puntoLuz.getMedidorEnergia().setFabricante(null);
         }
@@ -1058,6 +1064,15 @@ public class InventarioControl implements Serializable {
         if (puntoLuz.getMedidorEnergia().getTipoProteccion().getId() == null) {
             puntoLuz.getMedidorEnergia().setTipoProteccion(null);
         }
+    }
+
+    private void verificarSeleccionParametricas() {
+        verificarSeleccionParametricasUbicacion();
+        verificarSeleccionParametricasTransformador();
+        verificarSeleccionParametricasLuminaria();
+        verificarSeleccionParametricasBombillo();
+        verificarSeleccionParametricasPoste();
+        verificarSeleccionParametricasMedidor();
     }
 
     public void inicializarArrancador() {
@@ -1168,5 +1183,425 @@ public class InventarioControl implements Serializable {
         } else {
             ubicacionPuntoFacade.edit(puntoLuz.getUbicacionPunto());
         }
+
+        FacesMessage message = new FacesMessage("Hecho.", "Lo datos de la ubicación han sido guardados.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+
+        procesarOpcionesUbicacionPunto();
+    }
+
+    public void inicializarTransformador() {
+        String inicializar = inicializarTiposTransformador();
+
+        if (puntoLuz.getTransformador() == null) {
+            puntoLuz.setTransformador(new Transformador());
+            puntoLuz.getTransformador().setFabricante(new Fabricante());
+            puntoLuz.getTransformador().setTipoTransformador(new TipoTransformador());
+            puntoLuz.getTransformador().setTipoConexionTransformador(new TipoConexionTransformador());
+            puntoLuz.getTransformador().setFase(new Fase());
+            puntoLuz.getTransformador().setFrecuencia(new Frecuencia());
+            puntoLuz.getTransformador().setPotencia(new Potencia());
+            puntoLuz.getTransformador().setVoltajeAlta(new Voltaje());
+            puntoLuz.getTransformador().setVoltajeBaja(new Voltaje());
+        } else {
+            if (puntoLuz.getTransformador().getTipoTransformador() == null) {
+                puntoLuz.getTransformador().setTipoTransformador(new TipoTransformador());
+            }
+            if (puntoLuz.getTransformador().getFabricante() == null) {
+                puntoLuz.getTransformador().setFabricante(new Fabricante());
+            }
+
+            if (puntoLuz.getTransformador().getFrecuencia() == null) {
+                puntoLuz.getTransformador().setFrecuencia(new Frecuencia());
+            }
+
+            if (puntoLuz.getTransformador().getFase() == null) {
+                puntoLuz.getTransformador().setFase(new Fase());
+            }
+            if (puntoLuz.getTransformador().getTipoConexionTransformador() == null) {
+                puntoLuz.getTransformador().setTipoConexionTransformador(new TipoConexionTransformador());
+            }
+            if (puntoLuz.getTransformador().getVoltajeAlta() == null) {
+                puntoLuz.getTransformador().setVoltajeAlta(new Voltaje());
+            }
+
+            if (puntoLuz.getTransformador().getVoltajeBaja() == null) {
+                puntoLuz.getTransformador().setVoltajeBaja(new Voltaje());
+            }
+
+            if (puntoLuz.getTransformador().getPotencia() == null) {
+                puntoLuz.getTransformador().setPotencia(new Potencia());
+            }
+        }
+    }
+
+    public void guardarTransformador() {
+        if (puntoLuz.getTransformador().getId() == null) {
+            verificarSeleccionParametricasTransformador();
+            transformadorFacade.create(puntoLuz.getTransformador());
+        } else {
+            if (puntoLuz.getTransformador().getTipoTransformador().getId() != null) {
+                puntoLuz.getTransformador().setTipoTransformador(tipoTransformadorFacade.find(puntoLuz.getTransformador().getTipoTransformador().getId()));
+            } else {
+                puntoLuz.getTransformador().setTipoConexionTransformador(null);
+            }
+
+            if (puntoLuz.getTransformador().getFabricante().getId() != 0) {
+                puntoLuz.getTransformador().setFabricante(fabricanteFacade.find(puntoLuz.getTransformador().getFabricante().getId()));
+            } else {
+                puntoLuz.getTransformador().setFabricante(null);
+            }
+
+            if (puntoLuz.getTransformador().getFrecuencia().getId() != null) {
+                puntoLuz.getTransformador().setFrecuencia(frecuenciaFacade.find(puntoLuz.getTransformador().getFrecuencia().getId()));
+            } else {
+                puntoLuz.getTransformador().setFrecuencia(null);
+            }
+
+            if (puntoLuz.getTransformador().getFase().getId() != null) {
+                puntoLuz.getTransformador().setFase(faseFacade.find(puntoLuz.getTransformador().getFase().getId()));
+            } else {
+                puntoLuz.getTransformador().setFase(null);
+            }
+
+            if (puntoLuz.getTransformador().getTipoConexionTransformador().getId() != null) {
+                puntoLuz.getTransformador().setTipoConexionTransformador(tipoConexionTransformadorFacade.find(puntoLuz.getTransformador().getTipoConexionTransformador().getId()));
+            } else {
+                puntoLuz.getTransformador().setTipoConexionTransformador(null);
+            }
+
+            if (puntoLuz.getTransformador().getVoltajeAlta().getId() != null) {
+                puntoLuz.getTransformador().setVoltajeAlta(voltajeFacade.find(puntoLuz.getTransformador().getVoltajeAlta().getId()));
+            } else {
+                puntoLuz.getTransformador().setVoltajeAlta(null);
+            }
+
+            if (puntoLuz.getTransformador().getVoltajeBaja().getId() != null) {
+                puntoLuz.getTransformador().setVoltajeBaja(voltajeFacade.find(puntoLuz.getTransformador().getVoltajeBaja().getId()));
+            } else {
+                puntoLuz.getTransformador().setVoltajeBaja(null);
+            }
+
+            if (puntoLuz.getTransformador().getPotencia().getId() != null) {
+                puntoLuz.getTransformador().setPotencia(potenciaFacade.find(puntoLuz.getTransformador().getPotencia().getId()));
+            } else {
+                puntoLuz.getTransformador().setPotencia(null);
+            }
+
+            transformadorFacade.edit(puntoLuz.getTransformador());
+        }
+
+        FacesMessage message = new FacesMessage("Hecho.", "Lo datos del transformador han sido guardados.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+
+        inicializarTransformador();
+    }
+
+    public void inicializarLuminaria() {
+        String inicializar = inicializarTiposLuminaria();
+
+        if (puntoLuz.getLuminaria() == null) {
+            puntoLuz.setLuminaria(new Luminaria());
+            puntoLuz.getLuminaria().setTipoHerraje(new TipoHerraje());
+            puntoLuz.getLuminaria().setFabricante(new Fabricante());
+            puntoLuz.getLuminaria().setBrazoLuminaria(new BrazoLuminaria());
+            puntoLuz.getLuminaria().setBalasto(new Balasto());
+            puntoLuz.getLuminaria().getBalasto().setFabricante(new Fabricante());
+            puntoLuz.getLuminaria().getBalasto().setTipoBalasto(new TipoBalasto());
+            puntoLuz.getLuminaria().getBalasto().setTipoProteccion(new TipoProteccion());
+            puntoLuz.getLuminaria().setArrancador(new Arrancador());
+            puntoLuz.getLuminaria().getArrancador().setFabricante(new Fabricante());
+            puntoLuz.getLuminaria().getArrancador().setTipoArrancador(new TipoArrancador());
+            puntoLuz.getLuminaria().setPotencia(new Potencia());
+        } else {
+            if (puntoLuz.getLuminaria().getBrazoLuminaria() == null) {
+                puntoLuz.getLuminaria().setBrazoLuminaria(new BrazoLuminaria());
+            }
+
+            if (puntoLuz.getLuminaria().getBalasto() == null) {
+                puntoLuz.getLuminaria().setBalasto(new Balasto());
+                puntoLuz.getLuminaria().getBalasto().setFabricante(new Fabricante());
+                puntoLuz.getLuminaria().getBalasto().setTipoBalasto(new TipoBalasto());
+                puntoLuz.getLuminaria().getBalasto().setTipoProteccion(new TipoProteccion());
+            } else {
+                if (puntoLuz.getLuminaria().getBalasto().getFabricante() == null) {
+                    puntoLuz.getLuminaria().getBalasto().setFabricante(new Fabricante());
+                }
+
+                if (puntoLuz.getLuminaria().getBalasto().getTipoBalasto() == null) {
+                    puntoLuz.getLuminaria().getBalasto().setTipoBalasto(new TipoBalasto());
+                }
+
+                if (puntoLuz.getLuminaria().getBalasto().getTipoProteccion() == null) {
+                    puntoLuz.getLuminaria().getBalasto().setTipoProteccion(new TipoProteccion());
+                }
+            }
+
+            if (puntoLuz.getLuminaria().getArrancador() == null) {
+                puntoLuz.getLuminaria().setArrancador(new Arrancador());
+                puntoLuz.getLuminaria().getArrancador().setFabricante(new Fabricante());
+                puntoLuz.getLuminaria().getArrancador().setTipoArrancador(new TipoArrancador());
+            } else {
+                if (puntoLuz.getLuminaria().getArrancador().getFabricante() == null) {
+                    puntoLuz.getLuminaria().getArrancador().setFabricante(new Fabricante());
+                }
+
+                if (puntoLuz.getLuminaria().getArrancador().getTipoArrancador() == null) {
+                    puntoLuz.getLuminaria().getArrancador().setTipoArrancador(new TipoArrancador());
+                }
+            }
+
+            if (puntoLuz.getLuminaria().getFabricante() == null) {
+                puntoLuz.getLuminaria().setFabricante(new Fabricante());
+            }
+
+            if (puntoLuz.getLuminaria().getPotencia() == null) {
+                puntoLuz.getLuminaria().setPotencia(new Potencia());
+            }
+
+            if (puntoLuz.getLuminaria().getTipoHerraje() == null) {
+                puntoLuz.getLuminaria().setTipoHerraje(new TipoHerraje());
+            }
+        }
+    }
+
+    public void guardarLuminaria() {
+        verificarSeleccionParametricasLuminaria();
+
+        if (puntoLuz.getLuminaria().getId() == null) {
+            luminariaFacade.create(puntoLuz.getLuminaria());
+        } else {
+
+            if (puntoLuz.getLuminaria().getBalasto().getFabricante() != null) {
+                puntoLuz.getLuminaria().getBalasto().setFabricante(fabricanteFacade.find(puntoLuz.getLuminaria().getBalasto().getFabricante().getId()));
+            }
+
+            if (puntoLuz.getLuminaria().getBalasto().getTipoBalasto() != null) {
+                puntoLuz.getLuminaria().getBalasto().setTipoBalasto(tipoBalastoFacade.find(puntoLuz.getLuminaria().getBalasto().getTipoBalasto().getId()));
+            }
+
+            if (puntoLuz.getLuminaria().getBalasto().getTipoProteccion() != null) {
+                puntoLuz.getLuminaria().getBalasto().setTipoProteccion(tipoProteccionFacade.find(puntoLuz.getLuminaria().getBalasto().getTipoProteccion().getId()));
+            }
+
+            if (puntoLuz.getLuminaria().getArrancador().getFabricante() != null) {
+                puntoLuz.getLuminaria().getArrancador().setFabricante(fabricanteFacade.find(puntoLuz.getLuminaria().getArrancador().getFabricante().getId()));
+            }
+
+            if (puntoLuz.getLuminaria().getArrancador().getTipoArrancador() != null) {
+                puntoLuz.getLuminaria().getArrancador().setTipoArrancador(tipoArrancadorFacade.find(puntoLuz.getLuminaria().getArrancador().getTipoArrancador().getId()));
+            }
+
+            if (puntoLuz.getLuminaria().getFabricante() != null) {
+                puntoLuz.getLuminaria().setFabricante(fabricanteFacade.find(puntoLuz.getLuminaria().getFabricante().getId()));
+            }
+
+            if (puntoLuz.getLuminaria().getPotencia() != null) {
+                puntoLuz.getLuminaria().setPotencia(potenciaFacade.find(puntoLuz.getLuminaria().getPotencia().getId()));
+            }
+
+            if (puntoLuz.getLuminaria().getTipoHerraje() != null) {
+                puntoLuz.getLuminaria().setTipoHerraje(tipoHerrajeFacade.find(puntoLuz.getLuminaria().getTipoHerraje().getId()));
+            }
+
+            luminariaFacade.edit(puntoLuz.getLuminaria());
+        }
+
+        FacesMessage message = new FacesMessage("Hecho.", "Lo datos de la luminaria han sido guardados.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+
+        inicializarLuminaria();
+    }
+
+    public void inicializarBombillo() {
+        String inicializar = inicializarTiposBombillo();
+
+        if (puntoLuz.getBombillo() == null) {
+            puntoLuz.setBombillo(new Bombillo());
+            puntoLuz.getBombillo().setFabricante(new Fabricante());
+            puntoLuz.getBombillo().setTipoBombillo(new TipoBombillo());
+            puntoLuz.getBombillo().setPotencia(new Potencia());
+        } else {
+            if (puntoLuz.getBombillo().getFabricante() == null) {
+                puntoLuz.getBombillo().setFabricante(new Fabricante());
+            }
+
+            if (puntoLuz.getBombillo().getTipoBombillo() == null) {
+                puntoLuz.getBombillo().setTipoBombillo(new TipoBombillo());
+            }
+
+            if (puntoLuz.getBombillo().getPotencia() == null) {
+                puntoLuz.getBombillo().setPotencia(new Potencia());
+            }
+        }
+    }
+
+    public void guardarBombillo() {
+        verificarSeleccionParametricasBombillo();
+
+        if (puntoLuz.getBombillo().getId() == null) {
+            bombilloFacade.create(puntoLuz.getBombillo());
+        } else {
+            if (puntoLuz.getBombillo().getFabricante() != null) {
+                puntoLuz.getBombillo().setFabricante(fabricanteFacade.find(puntoLuz.getBombillo().getFabricante().getId()));
+            }
+
+            if (puntoLuz.getBombillo().getTipoBombillo() != null) {
+                puntoLuz.getBombillo().setTipoBombillo(tipoBombilloFacade.find(puntoLuz.getBombillo().getTipoBombillo().getId()));
+            }
+
+            if (puntoLuz.getBombillo().getPotencia() != null) {
+                puntoLuz.getBombillo().setPotencia(potenciaFacade.find(puntoLuz.getBombillo().getPotencia().getId()));
+            }
+
+            bombilloFacade.edit(puntoLuz.getBombillo());
+        }
+
+        FacesMessage message = new FacesMessage("Hecho.", "Lo datos del bombillo han sido guardados.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+
+        inicializarBombillo();
+    }
+
+    public void inicializarPoste() {
+        String inicializar = inicializarTiposPoste();
+
+        if (puntoLuz.getPoste() == null) {
+            puntoLuz.setPoste(new Poste());
+            puntoLuz.getPoste().setFabricante(new Fabricante());
+            puntoLuz.getPoste().setAlturaPoste(new AlturaPoste());
+            puntoLuz.getPoste().setMaterial(new MaterialPoste());
+        } else {
+            if (puntoLuz.getPoste().getFabricante() == null) {
+                puntoLuz.getPoste().setFabricante(new Fabricante());
+            }
+
+            if (puntoLuz.getPoste().getAlturaPoste() == null) {
+                puntoLuz.getPoste().setAlturaPoste(new AlturaPoste());
+            }
+
+            if (puntoLuz.getPoste().getMaterial() == null) {
+                puntoLuz.getPoste().setMaterial(new MaterialPoste());
+            }
+        }
+    }
+
+    public void guardarPoste() {
+        verificarSeleccionParametricasPoste();
+
+        if (puntoLuz.getPoste().getId() == null) {
+            posteFacade.create(puntoLuz.getPoste());
+        } else {
+            if (puntoLuz.getPoste().getFabricante() != null) {
+                puntoLuz.getPoste().setFabricante(fabricanteFacade.find(puntoLuz.getPoste().getFabricante().getId()));
+            }
+
+            if (puntoLuz.getPoste().getAlturaPoste() != null) {
+                puntoLuz.getPoste().setAlturaPoste(alturaPosteFacade.find(puntoLuz.getPoste().getAlturaPoste().getId()));
+            }
+
+            if (puntoLuz.getPoste().getMaterial() != null) {
+                puntoLuz.getPoste().setMaterial(materialPosteFacade.find(puntoLuz.getPoste().getMaterial().getId()));
+            }
+
+            posteFacade.edit(puntoLuz.getPoste());
+        }
+
+        FacesMessage message = new FacesMessage("Hecho.", "Lo datos del poste han sido guardados.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+
+        inicializarPoste();
+    }
+
+    public void inicializarMedidor() {
+        String incializar = inicializarTiposMedidor();
+
+        if (puntoLuz.getMedidorEnergia() == null) {
+            puntoLuz.setMedidorEnergia(new MedidorEnergia());
+            puntoLuz.getMedidorEnergia().setFabricante(new Fabricante());
+            puntoLuz.getMedidorEnergia().setClasePrecision(new ClasePrecision());
+            puntoLuz.getMedidorEnergia().setTipoMedidor(new TipoMedidor());
+            puntoLuz.getMedidorEnergia().setTipoConexionMedidor(new TipoConexionMedidor());
+            puntoLuz.getMedidorEnergia().setTipoProteccion(new TipoProteccion());
+            puntoLuz.getMedidorEnergia().setVoltajeAlta(new Voltaje());
+            puntoLuz.getMedidorEnergia().setVoltajeBaja(new Voltaje());
+            puntoLuz.getMedidorEnergia().setFrecuencia(new Frecuencia());
+            puntoLuz.getMedidorEnergia().setPotenciaMaxima(new Potencia());
+        } else {
+            if (puntoLuz.getMedidorEnergia().getFabricante() == null) {
+                puntoLuz.getMedidorEnergia().setFabricante(new Fabricante());
+            }
+
+            if (puntoLuz.getMedidorEnergia().getClasePrecision() == null) {
+                puntoLuz.getMedidorEnergia().setClasePrecision(new ClasePrecision());
+            }
+
+            if (puntoLuz.getMedidorEnergia().getTipoMedidor() == null) {
+                puntoLuz.getMedidorEnergia().setTipoMedidor(new TipoMedidor());
+            }
+            if (puntoLuz.getMedidorEnergia().getTipoConexionMedidor() == null) {
+                puntoLuz.getMedidorEnergia().setTipoConexionMedidor(new TipoConexionMedidor());
+            }
+            if (puntoLuz.getMedidorEnergia().getTipoProteccion() == null) {
+                puntoLuz.getMedidorEnergia().setTipoProteccion(new TipoProteccion());
+            }
+            if (puntoLuz.getMedidorEnergia().getVoltajeAlta() == null) {
+                puntoLuz.getMedidorEnergia().setVoltajeAlta(new Voltaje());
+            }
+            if (puntoLuz.getMedidorEnergia().getVoltajeBaja() == null) {
+                puntoLuz.getMedidorEnergia().setVoltajeBaja(new Voltaje());
+            }
+            if (puntoLuz.getMedidorEnergia().getFrecuencia() == null) {
+                puntoLuz.getMedidorEnergia().setFrecuencia(new Frecuencia());
+            }
+            if (puntoLuz.getMedidorEnergia().getPotenciaMaxima() == null) {
+                puntoLuz.getMedidorEnergia().setPotenciaMaxima(new Potencia());
+            }
+        }
+    }
+
+    public void guardarMedidor() {
+        verificarSeleccionParametricasMedidor();
+
+        if (puntoLuz.getMedidorEnergia().getId() == null) {
+            medidorEnergiaFacade.create(puntoLuz.getMedidorEnergia());
+        } else {
+            if (puntoLuz.getMedidorEnergia().getFabricante() != null) {
+                puntoLuz.getMedidorEnergia().setFabricante(fabricanteFacade.find(puntoLuz.getMedidorEnergia().getFabricante().getId()));
+            }
+
+            if (puntoLuz.getMedidorEnergia().getClasePrecision() != null) {
+                puntoLuz.getMedidorEnergia().setClasePrecision(clasePrecisionFacade.find(puntoLuz.getMedidorEnergia().getClasePrecision().getId()));
+            }
+
+            if (puntoLuz.getMedidorEnergia().getTipoMedidor() != null) {
+                puntoLuz.getMedidorEnergia().setTipoMedidor(tipoMedidorFacade.find(puntoLuz.getMedidorEnergia().getTipoMedidor().getId()));
+            }
+            if (puntoLuz.getMedidorEnergia().getTipoConexionMedidor() != null) {
+                puntoLuz.getMedidorEnergia().setTipoConexionMedidor(tipoConexionMedidorFacade.find(puntoLuz.getMedidorEnergia().getTipoConexionMedidor().getId()));
+            }
+            if (puntoLuz.getMedidorEnergia().getTipoProteccion() != null) {
+                puntoLuz.getMedidorEnergia().setTipoProteccion(tipoProteccionFacade.find(puntoLuz.getMedidorEnergia().getTipoProteccion().getId()));
+            }
+            if (puntoLuz.getMedidorEnergia().getVoltajeAlta() != null) {
+                puntoLuz.getMedidorEnergia().setVoltajeAlta(voltajeFacade.find(puntoLuz.getMedidorEnergia().getVoltajeAlta().getId()));
+            }
+            if (puntoLuz.getMedidorEnergia().getVoltajeBaja() != null) {
+                puntoLuz.getMedidorEnergia().setVoltajeBaja(voltajeFacade.find(puntoLuz.getMedidorEnergia().getVoltajeBaja().getId()));
+            }
+            if (puntoLuz.getMedidorEnergia().getFrecuencia() != null) {
+                puntoLuz.getMedidorEnergia().setFrecuencia(frecuenciaFacade.find(puntoLuz.getMedidorEnergia().getFrecuencia().getId()));
+            }
+            if (puntoLuz.getMedidorEnergia().getPotenciaMaxima() != null) {
+                puntoLuz.getMedidorEnergia().setPotenciaMaxima(potenciaFacade.find(puntoLuz.getMedidorEnergia().getPotenciaMaxima().getId()));
+            }
+
+            medidorEnergiaFacade.edit(puntoLuz.getMedidorEnergia());
+        }
+
+        FacesMessage message = new FacesMessage("Hecho.", "Lo datos del medidor de energía han sido guardados.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+
+        inicializarMedidor();
     }
 }

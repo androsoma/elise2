@@ -67,9 +67,6 @@ public class Luminaria implements Serializable {
     @JoinColumn(name = "fk_arrancador", referencedColumnName = "id")
     private Arrancador arrancador;
 
-//    @ManyToOne(cascade = {CascadeType.REFRESH})
-//    @JoinColumn(name = "fk_transformador", referencedColumnName = "id")
-//    private Transformador transformador;
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_tipoherraje", referencedColumnName = "id")
     private TipoHerraje tipoHerraje;

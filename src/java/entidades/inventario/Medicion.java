@@ -26,14 +26,14 @@ import javax.persistence.Temporal;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "Medicion.findMedicionLuminariaByMunicipio", 
+    @NamedQuery(name = "Medicion.findMedicionLuminariaByMunicipio",
             query = "SELECT med"
-                    + " FROM Medicion med, Luminaria lum, PuntoLuz pl"
-                    + " WHERE med.luminaria.id = lum.id "
-                    + "  AND lum.id = pl.luminaria.id"
-                    + "  AND pl.ubicacionPunto.municipio.id = :codigoMunicipio"
-                    + "  AND med.fechaMedicion >= :fechaInicioMedicion "
-                    + "  AND med.fechaMedicion <= :fechaFinalizacionMedicion ")})
+            + " FROM Medicion med, Luminaria lum, PuntoLuz pl"
+            + " WHERE med.luminaria.id = lum.id "
+            + "  AND lum.id = pl.luminaria.id"
+            + "  AND pl.ubicacionPunto.municipio.id = :codigoMunicipio"
+            + "  AND med.fechaMedicion >= :fechaInicioMedicion "
+            + "  AND med.fechaMedicion <= :fechaFinalizacionMedicion ")})
 public class Medicion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,27 +41,45 @@ public class Medicion implements Serializable {
     @SequenceGenerator(name = "MedicionSequence", sequenceName = "medicion_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MedicionSequence")
     private Long id;
-    
+
     @ManyToOne(optional = true, cascade = {CascadeType.REFRESH})
     @JoinColumn(name = "fk_luminaria")
     private Luminaria luminaria;
-    
+
     @ManyToOne(optional = true, cascade = {CascadeType.REFRESH})
     @JoinColumn(name = "fk_transformador")
     private Transformador transformador;
-    
+
     @Column
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaMedicion;
-    
+
+    @Column(length = 4)
+    private String anio;
+
+    @Column(length = 2)
+    private String mes;
+
+    @Column(length = 2)
+    private String dia;
+
+    @Column(length = 2)
+    private String hora;
+
+    @Column(length = 2)
+    private String minuto;
+
     @Column
     private float voltaje;
-    
+
     @Column
     private float corriente;
-    
+
     @Column
     private float cosenophi;
+
+    @Column
+    private float potencia;
 
     public Long getId() {
         return id;
@@ -95,6 +113,46 @@ public class Medicion implements Serializable {
         this.fechaMedicion = fechaMedicion;
     }
 
+    public String getAnio() {
+        return anio;
+    }
+
+    public void setAnio(String anio) {
+        this.anio = anio;
+    }
+
+    public String getMes() {
+        return mes;
+    }
+
+    public void setMes(String mes) {
+        this.mes = mes;
+    }
+
+    public String getDia() {
+        return dia;
+    }
+
+    public void setDia(String dia) {
+        this.dia = dia;
+    }
+
+    public String getHora() {
+        return hora;
+    }
+
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
+
+    public String getMinuto() {
+        return minuto;
+    }
+
+    public void setMinuto(String minuto) {
+        this.minuto = minuto;
+    }
+
     public float getVoltaje() {
         return voltaje;
     }
@@ -117,6 +175,14 @@ public class Medicion implements Serializable {
 
     public void setCosenophi(float cosenophi) {
         this.cosenophi = cosenophi;
+    }
+
+    public float getPotencia() {
+        return potencia;
+    }
+
+    public void setPotencia(float potencia) {
+        this.potencia = potencia;
     }
 
     @Override

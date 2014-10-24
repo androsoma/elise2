@@ -123,12 +123,12 @@
                 <h:form id="formAutenticacion">
                     <pm:field>
                         <h:outputLabel for="inputTextNombreUsuario" value="Nombre de usuario" />
-                        <h:inputText id="inputTextNombreUsuario" value="#{inventarioControl.usuario.nombreUsuario}" />
+                        <p:inputText id="inputTextNombreUsuario" value="#{inventarioControl.usuario.nombreUsuario}" />
                     </pm:field>
 
                     <pm:field>
                         <h:outputLabel for="inputSecretContrasena" value="Contraseña" />
-                        <h:inputSecret id="inputSecretContrasena" value="#{inventarioControl.usuario.contrasena}" />
+                        <p:password id="inputSecretContrasena" value="#{inventarioControl.usuario.contrasena}" />
                     </pm:field>
 
                     <pm:field>
@@ -153,5 +153,6 @@
         <ui:include src="mantenimiento/incidentes.xhtml" />
         <ui:include src="mantenimiento/ubicacionPuntoIncidente.xhtml" />
         <ui:include src="mantenimiento/accionesCierre.xhtml" />
+        <ui:include src="mantenimiento/mantenimiento.xhtml" />
     </h:body>
 </html>

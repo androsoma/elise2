@@ -14,17 +14,43 @@
 
         <pm:content>
             <h:form id="formIncidentes">
-                <p:dataList id="dataListIncidentes" value="#{mantenimientoControl.incidentes}" var="incidente"
-                            emptyMessage="No hay incidentes reportados pendientes por cierre.">
-                    <p:commandLink action="pm:ubicacionpuntoincidente"
-                                   actionListener="#{mantenimientoControl.seleccionarIncidente(incidente)}"
-                                   update=":ubicacionpuntoincidente:formUbicacionPuntoIncidente">
-                        <h2><h:outputText value="#{incidente.tipoIncidente.descripcion}" /></h2>
-                        <p><h:outputText value="#{incidente.puntoLuz.ubicacionPunto.direccion}" /></p>
-                    </p:commandLink>
-                </p:dataList>
+                <pm:field>
+                    <p:tabView>
+                        <p:tab title="Incidentes">
+                            <p:dataList id="dataListIncidentes" value="#{mantenimientoControl.incidentes}" var="incidente"
+                                        emptyMessage="No hay incidentes reportados pendientes por cierre.">
 
-                <h:outputText value="No hay incidentes reportados." rendered="#{empty mantenimientoControl.incidentes}" />
+                                <p:commandLink action="pm:ubicacionpuntoincidente"
+                                               actionListener="#{mantenimientoControl.seleccionarIncidente(incidente)}"
+                                               update=":ubicacionpuntoincidente:formUbicacionPuntoIncidente">
+
+                                    <h2><h:outputText value="#{incidente.tipoIncidente.descripcion}" /></h2>
+                                    <p><h:outputText value="#{incidente.puntoLuz.ubicacionPunto.direccion}" /></p>
+                                </p:commandLink>
+                            </p:dataList>
+
+                            <h:outputText value="No hay incidentes reportados." rendered="#{empty mantenimientoControl.incidentes}" />
+                        </p:tab>
+
+                        <p:tab title="Mantenimiento">
+                            <p:dataList id="dataListMantenimiento" value="#{mantenimientoControl.mantenimientos}" var="mantenimiento"
+                                        emptyMessage="No hay mantenimientos programados.">
+
+                                <p:commandLink action="pm:mantenimiento"
+                                               actionListener="#{mantenimientoControl.seleccionarMantenimiento(mantenimiento)}"
+                                               update=":mantenimiento:formMantenimiento">
+
+                                    <h2>
+                                        <h:outputText value="#{mantenimiento.fechaProgramacion}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        </h:outputText>
+                                    </h2>
+                                    <p><h:outputText value="#{mantenimiento.puntoLuz.direccionCompleta}" /></p>
+                                </p:commandLink>
+                            </p:dataList>
+                        </p:tab>                    
+                    </p:tabView>
+                </pm:field>
             </h:form>
         </pm:content>
     </pm:page>

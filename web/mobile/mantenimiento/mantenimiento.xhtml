@@ -1,0 +1,40 @@
+<f:view renderKitId="PRIMEFACES_MOBILE"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        contentType="text/html">
+
+    <pm:page id="mantenimiento">
+        <pm:header title="Mantenimiento">
+            <p:commandButton value="Atrás" action="pm:incidentes" icon="ui-icon-back" styleClass="ui-btn-inline" />
+        </pm:header>
+
+        <pm:content>
+            <h:form id="formMantenimiento">
+                <pm:field>
+                    <h:outputLabel for="inputTextDireccionPunto" value="Dirección del punto" />
+                    <p:inputText id="inputTextDireccionPunto" value="#{mantenimientoControl.mantenimientoPuntoLuzSeleccionado.puntoLuz.direccionCompleta}" disabled="true" />
+                </pm:field>
+                
+                <pm:field>
+                    <h:outputLabel for="inputTextFechaProgramacion" value="Fecha programación" />
+                    <p:inputText id="inputTextFechaProgramacion" value="#{mantenimientoControl.mantenimientoPuntoLuzSeleccionado.fechaProgramacion}" disabled="true">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </p:inputText>
+                </pm:field>
+                
+                <pm:field>
+                    <h:outputLabel for="inputTextareaObservaciones" value="Observaciones" />
+                    <p:inputTextarea id="inputTextareaObservaciones" value="#{mantenimientoControl.mantenimientoPuntoLuzSeleccionado.observaciones}" disabled="true" />
+                </pm:field>
+
+                <pm:field>
+                    <p:commandButton id="commandButtonCerrarIncidencia" value="Marcar como realizado" action="pm:incidentes" actionListener="#{mantenimientoControl.realizarMantenimiento}" update=":incidentes:formIncidentes" />
+                </pm:field>
+            </h:form>
+        </pm:content>
+    </pm:page>
+</f:view>

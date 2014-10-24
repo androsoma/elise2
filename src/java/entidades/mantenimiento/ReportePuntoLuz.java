@@ -38,7 +38,14 @@ import javax.persistence.Temporal;
             query = "SELECT rpl"
             + " FROM ReportePuntoLuz rpl"
             + " JOIN rpl.tipoEstadoReporte ter "
-            + " WHERE ter.id = :idTipoEstadoReporte")})
+            + " WHERE ter.id = :idTipoEstadoReporte"),
+    @NamedQuery(name = "ReportePuntoLuz.findByTipoEstadoReporteAndPuntoLuz",
+            query = "SELECT rpl"
+            + " FROM ReportePuntoLuz rpl"
+            + " JOIN rpl.tipoEstadoReporte ter "
+            + " JOIN rpl.puntoLuz pl"
+            + " WHERE ter.id = :idTipoEstadoReporte "
+            + "  AND pl.id = :idPuntoLuz")})
 
 public class ReportePuntoLuz implements Serializable {
 

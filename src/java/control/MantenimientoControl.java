@@ -10,6 +10,7 @@ import ejb.inventario.UsuarioFacade;
 import ejb.mantenimiento.AccionCierreFacade;
 import ejb.mantenimiento.AccionCierreReporteFacade;
 import ejb.mantenimiento.EstadoReporteFacade;
+import ejb.mantenimiento.MantenimientoPuntoLuzFacade;
 import ejb.mantenimiento.ReportePuntoLuzFacade;
 import ejb.mantenimiento.TipoEstadoReporteFacade;
 import entidades.inventario.Configuracion;
@@ -17,6 +18,7 @@ import entidades.inventario.Usuario;
 import entidades.mantenimiento.AccionCierre;
 import entidades.mantenimiento.AccionCierreReporte;
 import entidades.mantenimiento.EstadoReporte;
+import entidades.mantenimiento.MantenimientoPuntoLuz;
 import entidades.mantenimiento.ReportePuntoLuz;
 import entidades.mantenimiento.TipoEstadoReporte;
 import java.util.ArrayList;
@@ -39,7 +41,9 @@ public class MantenimientoControl {
 
     private List<String> reportes = null;
     private List<ReportePuntoLuz> incidentes = null;
+    private List<MantenimientoPuntoLuz> mantenimientos = null;
     private ReportePuntoLuz reportePuntoLuzSeleccionado = new ReportePuntoLuz();
+    private MantenimientoPuntoLuz mantenimientoPuntoLuzSeleccionado = new MantenimientoPuntoLuz();
     private List<AccionCierre> accionesCierreDisponibles = null;
     private List<String> accionesSeleccionadas = new ArrayList<>();
     private String[] accionesCierreSeleccionadas = new String[]{};
@@ -48,6 +52,10 @@ public class MantenimientoControl {
     @EJB
     @Inject
     private ReportePuntoLuzFacade reportePuntoLuzFacade;
+
+    @EJB
+    @Inject
+    private MantenimientoPuntoLuzFacade mantenimientoPuntoLuzFacade;
 
     @EJB
     @Inject
@@ -64,15 +72,15 @@ public class MantenimientoControl {
     @EJB
     @Inject
     private TipoEstadoReporteFacade tipoEstadoReporteFacade;
-    
+
     @EJB
     @Inject
     private EstadoReporteFacade estadoReporteFacade;
-    
+
     @EJB
     @Inject
     private ConfiguracionFacade configuracionFacade;
-    
+
     /**
      * Creates a new instance of MantenimientoControl
      */
@@ -95,6 +103,14 @@ public class MantenimientoControl {
         this.incidentes = incidentes;
     }
 
+    public List<MantenimientoPuntoLuz> getMantenimientos() {
+        return mantenimientos;
+    }
+
+    public void setMantenimientos(List<MantenimientoPuntoLuz> mantenimientos) {
+        this.mantenimientos = mantenimientos;
+    }
+
     public ReportePuntoLuz getReportePuntoLuzSeleccionado() {
         return reportePuntoLuzSeleccionado;
     }
@@ -103,12 +119,28 @@ public class MantenimientoControl {
         this.reportePuntoLuzSeleccionado = reportePuntoLuzSeleccionado;
     }
 
+    public MantenimientoPuntoLuz getMantenimientoPuntoLuzSeleccionado() {
+        return mantenimientoPuntoLuzSeleccionado;
+    }
+
+    public void setMantenimientoPuntoLuzSeleccionado(MantenimientoPuntoLuz mantenimientoPuntoLuzSeleccionado) {
+        this.mantenimientoPuntoLuzSeleccionado = mantenimientoPuntoLuzSeleccionado;
+    }
+
     public ReportePuntoLuzFacade getReportePuntoLuzFacade() {
         return reportePuntoLuzFacade;
     }
 
     public void setReportePuntoLuzFacade(ReportePuntoLuzFacade reportePuntoLuzFacade) {
         this.reportePuntoLuzFacade = reportePuntoLuzFacade;
+    }
+
+    public MantenimientoPuntoLuzFacade getMantenimientoPuntoLuzFacade() {
+        return mantenimientoPuntoLuzFacade;
+    }
+
+    public void setMantenimientoPuntoLuzFacade(MantenimientoPuntoLuzFacade mantenimientoPuntoLuzFacade) {
+        this.mantenimientoPuntoLuzFacade = mantenimientoPuntoLuzFacade;
     }
 
     public List<AccionCierre> getAccionesCierreDisponibles() {
@@ -190,21 +222,27 @@ public class MantenimientoControl {
     public void setConfiguracionFacade(ConfiguracionFacade configuracionFacade) {
         this.configuracionFacade = configuracionFacade;
     }
-    
+
     public String obtenerValorParametroConfiguracion(String parametro) {
         Configuracion parametroConfiguracion = configuracionFacade.getConfiguracionByNombre(parametro);
-        
+
         return parametroConfiguracion.getValor();
     }
 
     public void cargarIncidentesConfirmados() {
         incidentes = new ArrayList<>();
+        mantenimientos = new ArrayList<>();
 
-        incidentes = reportePuntoLuzFacade.consultarPorTipoEstadoReporte(Long.valueOf(obtenerValorParametroConfiguracion("identificadorEstadoConfirmado"))); 
+        incidentes = reportePuntoLuzFacade.consultarPorTipoEstadoReporte(Long.valueOf(obtenerValorParametroConfiguracion("identificadorEstadoConfirmado")));
+        mantenimientos = mantenimientoPuntoLuzFacade.buscarProgramados();
     }
 
     public void seleccionarIncidente(ReportePuntoLuz incidenteSelccionado) {
         reportePuntoLuzSeleccionado = incidenteSelccionado;
+    }
+
+    public void seleccionarMantenimiento(MantenimientoPuntoLuz mantenimientoSeleccionado) {
+        mantenimientoPuntoLuzSeleccionado = mantenimientoSeleccionado;
     }
 
     public void cargarAccionesCierre() {
@@ -214,10 +252,10 @@ public class MantenimientoControl {
 
     public void cerrarReporte() {
         Usuario usuario = usuarioFacade.find(1L); //Cambiar
-        
+
         for (String accionCierre : accionesCierreSeleccionadas) {
             AccionCierreReporte accionCierreReporte = new AccionCierreReporte();
-            
+
             accionCierreReporte.setReportePuntoLuz(reportePuntoLuzSeleccionado);
             accionCierreReporte.setAccionCierre(accionCierreFacade.find(Long.valueOf(accionCierre)));
             accionCierreReporte.setUsuario(usuario);
@@ -227,18 +265,18 @@ public class MantenimientoControl {
         }
 
         TipoEstadoReporte tipoEstadoReporte = tipoEstadoReporteFacade.find(3L);
-        
+
         EstadoReporte estadoReporte = new EstadoReporte();
         estadoReporte.setReportePuntoLuz(reportePuntoLuzSeleccionado);
         estadoReporte.setTipoEstadoReporte(tipoEstadoReporte);
         estadoReporte.setTercero(usuario.getTercero());
         estadoReporte.setFechaCambioEstado(new Date());
-        
+
         estadoReporteFacade.create(estadoReporte);
-        
+
         reportePuntoLuzSeleccionado.setTipoEstadoReporte(tipoEstadoReporte);
         reportePuntoLuzFacade.edit(reportePuntoLuzSeleccionado);
-        
+
         cargarIncidentesConfirmados();
     }
 
@@ -246,6 +284,15 @@ public class MantenimientoControl {
         for (String accion : accionesCierreSeleccionadas) {
             System.out.println("Acción seleccionada: " + accion);
         }
+    }
+
+    public void realizarMantenimiento() {
+        mantenimientoPuntoLuzSeleccionado.setRealizado(true);
+        mantenimientoPuntoLuzSeleccionado.setFechaRealizacion(new Date());
+
+        mantenimientoPuntoLuzFacade.edit(mantenimientoPuntoLuzSeleccionado);
+
+        cargarIncidentesConfirmados();
     }
 
 }

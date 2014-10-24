@@ -5,6 +5,7 @@ import ejb.inventario.PuntoLuzFacade;
 import ejb.inventario.TerceroFacade;
 import ejb.inventario.UsuarioFacade;
 import ejb.mantenimiento.EstadoReporteFacade;
+import ejb.mantenimiento.MantenimientoPuntoLuzFacade;
 import ejb.mantenimiento.ReportePuntoLuzFacade;
 import ejb.mantenimiento.TipoEstadoReporteFacade;
 import ejb.mantenimiento.TipoIncidenteFacade;
@@ -16,6 +17,7 @@ import entidades.inventario.PuntoLuz;
 import entidades.inventario.Tercero;
 import entidades.inventario.Usuario;
 import entidades.mantenimiento.EstadoReporte;
+import entidades.mantenimiento.MantenimientoPuntoLuz;
 import entidades.mantenimiento.ReportePuntoLuz;
 import entidades.mantenimiento.TipoEstadoReporte;
 import entidades.mantenimiento.TipoIncidente;
@@ -40,6 +42,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.map.OverlaySelectEvent;
+import org.primefaces.extensions.model.timeline.TimelineEvent;
+import org.primefaces.extensions.model.timeline.TimelineModel;
 import org.primefaces.model.UploadedFile;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
@@ -70,11 +74,14 @@ public class AdministracionControl implements Serializable {
     private List<String> imagenesIncidente;
     private Usuario usuarioAutenticado;
     private List<ReportePuntoLuz> incidentesReportados;
+    private List<MantenimientoPuntoLuz> mantenimientosPuntosLuz;
     private ReportePuntoLuz incidenteSeleccionado;
+    private MantenimientoPuntoLuz mantenimientoPuntoLuz;
     private List<Departamento> departamentos;
     private List<Municipio> municipios;
     private List<Barrio> barrios;
     private List<Zona> zonas;
+    private TimelineModel modeloTimeline;
 
     @ManagedProperty(name = "inventarioControl", value = "#{inventarioControl}")
     private InventarioControl inventarioControl;
@@ -90,6 +97,10 @@ public class AdministracionControl implements Serializable {
     @EJB
     @Inject
     ReportePuntoLuzFacade reportePuntoLuzFacade;
+
+    @EJB
+    @Inject
+    private MantenimientoPuntoLuzFacade mantenimientoPuntoLuzFacade;
 
     @EJB
     @Inject
@@ -241,12 +252,28 @@ public class AdministracionControl implements Serializable {
         this.incidentesReportados = incidentesReportados;
     }
 
+    public List<MantenimientoPuntoLuz> getMantenimientosPuntosLuz() {
+        return mantenimientosPuntosLuz;
+    }
+
+    public void setMantenimientosPuntosLuz(List<MantenimientoPuntoLuz> mantenimientosPuntosLuz) {
+        this.mantenimientosPuntosLuz = mantenimientosPuntosLuz;
+    }
+
     public ReportePuntoLuz getIncidenteSeleccionado() {
         return incidenteSeleccionado;
     }
 
     public void setIncidenteSeleccionado(ReportePuntoLuz incidenteSeleccionado) {
         this.incidenteSeleccionado = incidenteSeleccionado;
+    }
+
+    public MantenimientoPuntoLuz getMantenimientoPuntoLuz() {
+        return mantenimientoPuntoLuz;
+    }
+
+    public void setMantenimientoPuntoLuz(MantenimientoPuntoLuz mantenimientoPuntoLuz) {
+        this.mantenimientoPuntoLuz = mantenimientoPuntoLuz;
     }
 
     public List<Departamento> getDepartamentos() {
@@ -281,6 +308,14 @@ public class AdministracionControl implements Serializable {
         this.zonas = zonas;
     }
 
+    public TimelineModel getModeloTimeline() {
+        return modeloTimeline;
+    }
+
+    public void setModeloTimeline(TimelineModel modeloTimeline) {
+        this.modeloTimeline = modeloTimeline;
+    }
+
     public InventarioControl getInventarioControl() {
         return inventarioControl;
     }
@@ -311,6 +346,14 @@ public class AdministracionControl implements Serializable {
 
     public void setReportePuntoLuzFacade(ReportePuntoLuzFacade reportePuntoLuzFacade) {
         this.reportePuntoLuzFacade = reportePuntoLuzFacade;
+    }
+
+    public MantenimientoPuntoLuzFacade getMantenimientoPuntoLuzFacade() {
+        return mantenimientoPuntoLuzFacade;
+    }
+
+    public void setMantenimientoPuntoLuzFacade(MantenimientoPuntoLuzFacade mantenimientoPuntoLuzFacade) {
+        this.mantenimientoPuntoLuzFacade = mantenimientoPuntoLuzFacade;
     }
 
     public ConfiguracionFacade getConfiguracionFacade() {
@@ -506,6 +549,7 @@ public class AdministracionControl implements Serializable {
         if (usuario != null) {
             usuarioAutenticado = usuario;
             inicializarPuntosLuz();
+            inventarioControl.inicializarPunto();
 
             return "administracion";
         } else {
@@ -571,14 +615,56 @@ public class AdministracionControl implements Serializable {
 
     public void editarPuntoLuz() {
         inventarioControl.setPuntoLuz(puntoLuzSeleccionado);
-
         inventarioControl.procesarOpcionesUbicacionPunto();
+        inventarioControl.inicializarTransformador();
+        inventarioControl.inicializarLuminaria();
+        inventarioControl.inicializarBombillo();
+        inventarioControl.inicializarPoste();
+        inventarioControl.inicializarMedidor();
+        
+        inicializarMantenimientoPuntoLuz();
+        generarTimelinePuntoLuz();
+    }
+
+    public void generarTimelinePuntoLuz() {
+        modeloTimeline = new TimelineModel();
+
+        incidentesReportados = reportePuntoLuzFacade.consultarPorTipoEstadoReporteYPuntoLuz(Long.valueOf(getValorParametroConfiguracion("identificadorEstadoCerrado")), puntoLuzSeleccionado.getId());
+        mantenimientosPuntosLuz = mantenimientoPuntoLuzFacade.buscarMantenimientosPorPuntoLuz(puntoLuzSeleccionado.getId());
+
+        for (ReportePuntoLuz incidenteCerrado : incidentesReportados) {
+            modeloTimeline.add(new TimelineEvent(incidenteCerrado.getTipoIncidente().getDescripcion(), incidenteCerrado.getFechaIncidencia()));
+        }
+
+        for (MantenimientoPuntoLuz mantenimiento : mantenimientosPuntosLuz) {
+            if (!mantenimiento.isRealizado()) {
+                modeloTimeline.add(new TimelineEvent("Mantenimiento programado", mantenimiento.getFechaProgramacion()));
+            } else {
+                modeloTimeline.add(new TimelineEvent("Mantenimiento", mantenimiento.getFechaRealizacion()));
+            }
+        }
     }
 
     public String getValorParametroConfiguracion(String parametro) {
         Configuracion parametroConfiguracion = configuracionFacade.getConfiguracionByNombre(parametro);
 
         return parametroConfiguracion.getValor();
+    }
+
+    public void inicializarMantenimientoPuntoLuz() {
+        mantenimientoPuntoLuz = new MantenimientoPuntoLuz();
+        mantenimientoPuntoLuz.setPuntoLuz(new PuntoLuz());
+        mantenimientoPuntoLuz.setRealizado(false);
+    }
+
+    public void agregarMantenimientoPuntoLuz() {
+        mantenimientoPuntoLuz.setPuntoLuz(puntoLuzSeleccionado);
+        mantenimientoPuntoLuzFacade.create(mantenimientoPuntoLuz);
+        mantenimientosPuntosLuz = mantenimientoPuntoLuzFacade.buscarMantenimientosPorPuntoLuz(puntoLuzSeleccionado.getId());
+
+        modeloTimeline.add(new TimelineEvent("Mantenimiento programado", mantenimientoPuntoLuz.getFechaProgramacion()));
+        inicializarMantenimientoPuntoLuz();
+
     }
 
 }

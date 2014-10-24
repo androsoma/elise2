@@ -19,7 +19,8 @@
                 <p:password id="passwordContrasenaUsuario" value="#{administracionControl.usuarioAutenticado.contrasena}"
                             required="true" requiredMessage="Debe especificar una contraseña." style="width: 100%;" />
                 <p:message for="passwordContrasenaUsuario" />
-                <br />
+                
+                <p:spacer />
                 <p:commandButton value="Ingresar" action="#{administracionControl.autenticarUsuario}" update="formIniciarSesion" />
             </h:panelGrid>
         </h:form> 

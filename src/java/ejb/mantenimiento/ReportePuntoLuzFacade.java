@@ -44,4 +44,11 @@ public class ReportePuntoLuzFacade extends AbstractFacade<ReportePuntoLuz> {
          return (List<ReportePuntoLuz>) query.getResultList();
     }
     
+    public List<ReportePuntoLuz> consultarPorTipoEstadoReporteYPuntoLuz(Long idTipoEstadoReporte, Long idPuntoLuz) {
+        Query query = em.createNamedQuery("ReportePuntoLuz.findByTipoEstadoReporteAndPuntoLuz");
+        query.setParameter("idTipoEstadoReporte", idTipoEstadoReporte);
+        query.setParameter("idPuntoLuz", idPuntoLuz);
+        
+        return query.getResultList();
+    }
 }

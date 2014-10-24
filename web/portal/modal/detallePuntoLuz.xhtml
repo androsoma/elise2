@@ -1,15 +1,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"        
-      contentType="text/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"      
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      contentType="text/html">
 
     <p:dialog id="dialogDetallePuntoLuz" header="Detalle" widgetVar="dialogDetallePuntoLuz"
-              closable="false" modal="true" resizable="false" draggable="false">
+              closable="true" modal="true" resizable="true" draggable="true" closeOnEscape="true">
         <h:form id="formDetallePuntoLuz">
-            <p:tabView >
+            <p:tabView>
                 <p:tab title="Ubicación">
-                    <h:panelGrid id="panelGridUbicacionPuntoLuz" width="100%">
+                    <h:panelGrid id="panelGridUbicacionPuntoLuz" columns="2">
                         <h:outputLabel for="inputTextDireccion" value="Dirección" style="font-weight: bold;" />
                         <p:inputText id="inputTextDireccion" value="#{inventarioControl.puntoLuz.ubicacionPunto.direccion}" style="width: 100%;" />
 
@@ -42,46 +43,346 @@
                             <f:selectItem itemValue="" itemLabel="Seleccione..." />
                             <f:selectItems value="#{inventarioControl.barrios}" var="barrio" itemValue="#{barrio.id}" itemLabel="#{barrio.nombre}"/>
                         </p:selectOneMenu>
-
-                        <p:commandButton value="Guardar cambios" action="#{inventarioControl.guardarUbicacion}" oncomplete="PF('dialogDetallePuntoLuz').hide();" />
                     </h:panelGrid>
+
+                    <p:spacer />
+                    <p:commandButton value="Guardar cambios" action="#{inventarioControl.guardarUbicacion}" update=":formAdministracion:growlMensajes" />
                 </p:tab>
 
                 <p:tab title="Transformador">
+                    <h:panelGrid id="panelGridTransformador" columns="2" width="100%">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel for="selectOneMenuTipoTransformador" value="Tipo transformador" style="font-weight: bold;" />
+                            <p:selectOneMenu id="selectOneMenuTipoTransformador" value="#{inventarioControl.puntoLuz.transformador.tipoTransformador.id}" >
+                                <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                                <f:selectItems value="#{inventarioControl.tiposTransformador}" var="tipo" itemLabel="#{tipo.descripcion}" itemValue="#{tipo.id}" />
+                            </p:selectOneMenu>
 
-                    <h:outputLabel for="" value="" style="font-weight: bold;" />
-                    <h:outputLabel for="" value="" style="font-weight: bold;" />
-                    <h:outputLabel for="" value="" style="font-weight: bold;" />
+                            <h:outputLabel for="selectOneMenuFabricanteTransformador" value="Fabricante" style="font-weight: bold;" />
+                            <p:selectOneMenu id="selectOneMenuFabricanteTransformador" value="#{inventarioControl.puntoLuz.transformador.fabricante.id}" >
+                                <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                                <f:selectItems value="#{inventarioControl.fabricantes}" var="fabricante" itemLabel="#{fabricante.nombre}" itemValue="#{fabricante.id}" />
+                            </p:selectOneMenu>
 
+                            <h:outputLabel for="inputTextReferenciaTransformador" value="Referencia" style="font-weight: bold;" />
+                            <p:inputText id="inputTextReferenciaTransformador" value="#{inventarioControl.puntoLuz.transformador.referencia}" />
 
+                            <h:outputLabel for="inputTextSerialTransformador" value="Serial" style="font-weight: bold;" />
+                            <p:inputText id="inputTextSerialTransformador" value="#{inventarioControl.puntoLuz.transformador.serial}" />
+
+                            <h:outputLabel for="selectOneRadioTransformadorExclusivo" value="¿Exclusivo?" style="font-weight: bold;" />
+                            <p:selectOneRadio id="selectOneRadioTransformadorExclusivo" value="#{inventarioControl.puntoLuz.transformador.exclusivo}">
+                                <f:selectItem itemValue="#{true}" itemLabel="Sí" />
+                                <f:selectItem itemValue="#{false}" itemLabel="No" />
+                            </p:selectOneRadio>
+
+                            <h:outputLabel for="selectOneButtonFrecuenciaTransformador" value="Frecuencia" style="font-weight: bold;" />
+                            <p:selectOneRadio id="selectOneButtonFrecuenciaTransformador" value="#{inventarioControl.puntoLuz.transformador.frecuencia.id}">
+                                <f:selectItems value="#{inventarioControl.frecuencias}" var="frecuencia" itemValue="#{frecuencia.id}" itemLabel="#{frecuencia.descripcion}" />
+                            </p:selectOneRadio>
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2">
+                            <h:outputLabel for="selectOneButtonFaseTransformador" value="Fase" style="font-weight: bold;" />
+                            <p:selectOneRadio id="selectOneButtonFaseTransformador" value="#{inventarioControl.puntoLuz.transformador.fase.id}">
+                                <f:selectItems value="#{inventarioControl.fases}" var="fase" itemValue="#{fase.id}" itemLabel="#{fase.descripcion}" />
+                            </p:selectOneRadio>
+
+                            <h:outputLabel for="selectOneMenuTipoConexionTransformador" value="Tipo conexión" style="font-weight: bold;" />
+                            <p:selectOneMenu id="selectOneMenuTipoConexionTransformador" value="#{inventarioControl.puntoLuz.transformador.tipoConexionTransformador.id}" >
+                                <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                                <f:selectItems value="#{inventarioControl.tiposConexionTransformador}" var="tipoconexion" itemValue="#{tipoconexion.id}" itemLabel="#{tipoconexion.descripcion}" />
+                            </p:selectOneMenu>
+
+                            <h:outputLabel for="selectOneMenuTipoVoltajeAltaTransformador" value="Voltaje Alta" style="font-weight: bold;" />
+                            <p:selectOneMenu id="selectOneMenuTipoVoltajeAltaTransformador" value="#{inventarioControl.puntoLuz.transformador.voltajeAlta.id}" >
+                                <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                                <f:selectItems value="#{inventarioControl.voltajes}" var="voltaje" itemValue="#{voltaje.id}" itemLabel="#{voltaje.descripcion}" />
+                            </p:selectOneMenu>
+
+                            <h:outputLabel for="selectOneMenuTipoVoltajeBajaTransformador" value="Voltaje Baja" style="font-weight: bold;" />
+                            <p:selectOneMenu id="selectOneMenuTipoVoltajeBajaTransformador" value="#{inventarioControl.puntoLuz.transformador.voltajeBaja.id}" >
+                                <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                                <f:selectItems value="#{inventarioControl.voltajes}" var="voltaje" itemValue="#{voltaje.id}" itemLabel="#{voltaje.descripcion}" />
+                            </p:selectOneMenu> 
+
+                            <h:outputLabel for="selectOneMenuPotenciaTransformador" value="Potencia" style="font-weight: bold;" />
+                            <p:selectOneMenu id="selectOneMenuPotenciaTransformador" value="#{inventarioControl.puntoLuz.transformador.potencia.id}" >
+                                <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                                <f:selectItems value="#{inventarioControl.potencias}" var="potencia" itemValue="#{potencia.id}" itemLabel="#{potencia.descripcion}" />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+
+                        <p:spacer /><p:spacer />
+                        <p:commandButton id="commandButtonGuardarTransformador" action="#{inventarioControl.guardarTransformador}" value="Guardar cambios" update=":formAdministracion:growlMensajes" />
+                    </h:panelGrid>
                 </p:tab>
 
                 <p:tab title="Luminaria">
+                    <h:panelGrid columns="4">
+                        <h:outputLabel for="inputTextReferenciaLuminaria" value="Referencia" style="font-weight: bold;" />
+                        <p:inputText id="inputTextReferenciaLuminaria" value="#{inventarioControl.puntoLuz.luminaria.referencia}" title="Referencia" />
 
+                        <h:outputLabel for="selectOneMenuFabricanteLuminaria" value="Fabricante" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuFabricanteLuminaria" value="#{inventarioControl.puntoLuz.luminaria.fabricante.id}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{inventarioControl.fabricantes}" var="fabricante" itemValue="#{fabricante.id}" itemLabel="#{fabricante.nombre}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="inputTextAlturaLuminaria" value="Altura" style="font-weight: bold;" />
+                        <p:inputText id="inputTextAlturaLuminaria" value="#{inventarioControl.puntoLuz.luminaria.altura}" />
+
+                        <h:outputLabel for="selectOneMenuTipoHerraje" value="Tipo herraje" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuTipoHerraje" value="#{inventarioControl.puntoLuz.luminaria.tipoHerraje.id}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{inventarioControl.tiposHerraje}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="inputTextNivelIluminacion" value="Nivel de iluminación" style="font-weight: bold;" />
+                        <p:inputText id="inputTextNivelIluminacion" value="#{inventarioControl.puntoLuz.luminaria.nivelIluminacion}" />
+
+                        <h:outputLabel for="selectOneMenuPotenciaLuminaria" value="Potencia" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuPotenciaLuminaria" value="#{inventarioControl.puntoLuz.luminaria.potencia.id}">
+                            <f:selectItem itemLabel="Seleccione.." itemValue=""/>
+                            <f:selectItems value="#{inventarioControl.potencias}" var="potencia" itemValue="#{potencia.id}" itemLabel="#{potencia.descripcion}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+
+                    <p:accordionPanel activeIndex="x">
+                        <p:tab title="Brazo luminaria">
+                            <h:panelGrid columns="2">
+                                <h:outputLabel for="inputTextLargo" value="Largo [metros]" style="font-weight: bold;" />
+                                <h:outputLabel for="inputTextDiametro" value="Diámetro [pulgadas]" style="font-weight: bold;" />
+
+                                <p:inputText id="inputTextLargo" value="#{inventarioControl.puntoLuz.luminaria.brazoLuminaria.largo}" />
+                                <p:inputText id="inputTextDiametro" value="#{inventarioControl.puntoLuz.luminaria.brazoLuminaria.diametro}" />
+                            </h:panelGrid>
+                        </p:tab>
+
+                        <p:tab title="Balasto">
+                            <h:panelGrid columns="2">
+                                <h:outputLabel for="inputTextReferenciaBalasto" value="Referencia" style="font-weight: bold;" />
+                                <h:outputLabel for="selectOneMenuFabricanteBalasto" value="Fabricante" style="font-weight: bold;" />
+
+                                <p:inputText id="inputTextReferenciaBalasto" value="#{inventarioControl.puntoLuz.luminaria.balasto.referencia}" />
+                                <p:selectOneMenu id="selectOneMenuFabricanteBalasto" value="#{inventarioControl.puntoLuz.luminaria.balasto.fabricante.id}" >
+                                    <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                                    <f:selectItems value="#{inventarioControl.fabricantes}" var="fabricante" itemValue="#{fabricante.id}" itemLabel="#{fabricante.nombre}" />
+                                </p:selectOneMenu>
+
+                                <h:outputLabel for="selectOneMenuTipoBalasto" value="Tipo balasto lámpara" style="font-weight: bold;" />
+                                <h:outputLabel for="selectOneMenuTipoProteccion" value="Tipo protección ambiente" style="font-weight: bold;" />
+
+                                <p:selectOneMenu id="selectOneMenuTipoBalasto" value="#{inventarioControl.puntoLuz.luminaria.balasto.tipoBalasto.id}">
+                                    <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                                    <f:selectItems value="#{inventarioControl.tiposBalasto}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+                                </p:selectOneMenu>
+                                <p:selectOneMenu id="selectOneMenuTipoProteccion" value="#{inventarioControl.puntoLuz.luminaria.balasto.tipoProteccion.id}">
+                                    <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                                    <f:selectItems value="#{inventarioControl.tiposProteccion}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </p:tab>
+
+                        <p:tab title="Arrancador">
+                            <h:panelGrid columns="3">
+                                <h:outputLabel for="inputTextReferenciaArrancador" value="Referencia" style="font-weight: bold;" />
+                                <h:outputLabel for="selectOneMenuFabricanteArrancador" value="Fabricante" style="font-weight: bold;" />
+                                <h:outputLabel for="selectOneMenuTipoArrancador" value="Tipo arrancador" style="font-weight: bold;" />
+
+                                <p:inputText id="inputTextReferenciaArrancador" value="#{inventarioControl.puntoLuz.luminaria.arrancador.referencia}" />
+                                <p:selectOneMenu id="selectOneMenuFabricanteArrancador" value="#{inventarioControl.puntoLuz.luminaria.arrancador.fabricante.id}" >
+                                    <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                                    <f:selectItems value="#{inventarioControl.fabricantes}" var="fabricante" itemValue="#{fabricante.id}" itemLabel="#{fabricante.nombre}" />
+                                </p:selectOneMenu>
+                                <p:selectOneMenu id="selectOneMenuTipoArrancador" value="#{inventarioControl.puntoLuz.luminaria.arrancador.tipoArrancador.id}" >
+                                    <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                                    <f:selectItems value="#{inventarioControl.tiposArrancador}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </p:tab>
+                    </p:accordionPanel>
+
+                    <p:spacer />
+                    <p:commandButton id="commandButtonGuardarLuminaria" action="#{inventarioControl.guardarLuminaria}" value="Guardar cambios" update=":formAdministracion:growlMensajes" />
                 </p:tab>
 
                 <p:tab title="Bombillo">
+                    <h:panelGrid columns="4">
+                        <h:outputLabel for="inputTextReferenciaBombillo" value="Referencia" style="font-weight: bold;" />
+                        <p:inputText id="inputTextReferenciaBombillo" value="#{inventarioControl.puntoLuz.bombillo.referencia}" title="Referencia" />
 
+                        <h:outputLabel for="selectOneMenuTipoBombillo" value="Tipo bombillo" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuTipoBombillo" value="#{inventarioControl.puntoLuz.bombillo.tipoBombillo.id}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />  
+                            <f:selectItems value="#{inventarioControl.tiposBombillo}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="inputTextFlujoLuminoso" value="Flujo luminoso" style="font-weight: bold;" />
+                        <p:inputText id="inputTextFlujoLuminoso" value="#{inventarioControl.puntoLuz.bombillo.flujoLuminoso}" title="Flujo luminoso" />
+
+                        <h:outputLabel for="selectOneMenuFabricanteBombillo" value="Fabricante" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuFabricanteBombillo" value="#{inventarioControl.puntoLuz.bombillo.fabricante.id}" >
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{inventarioControl.fabricantes}" var="fabricante" itemValue="#{fabricante.id}" itemLabel="#{fabricante.nombre}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="inputTextVidaUtil" value="Vida útil" style="font-weight: bold;" />
+                        <p:inputText id="inputTextVidaUtil" value="#{inventarioControl.puntoLuz.bombillo.vidaUtil}" title="Vida útil" />
+
+                        <h:outputLabel for="selectOneMenuPotencia" value="Potencia" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuPotencia" value="#{inventarioControl.puntoLuz.bombillo.potencia.id}" >
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />  
+                            <f:selectItems value="#{inventarioControl.potencias}" var="potencia" itemValue="#{potencia.id}" itemLabel="#{potencia.descripcion}" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+
+                    <p:spacer />
+                    <p:commandButton id="commandButtonGuardarBombillo" action="#{inventarioControl.guardarBombillo}" value="Guardar cambios" update=":formAdministracion:growlMensajes" />
                 </p:tab>
 
                 <p:tab title="Poste">
+                    <h:panelGrid columns="2">
+                        <h:outputLabel for="inputTextReferenciaPoste" value="Referencia" style="font-weight: bold;" />
+                        <p:inputText id="inputTextReferenciaPoste" value="#{inventarioControl.puntoLuz.poste.referencia}" title="Referencia" />
 
+                        <h:outputLabel for="selectOneMenuFabricantePoste" value="Fabricante" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuFabricantePoste" value="#{inventarioControl.puntoLuz.poste.fabricante.id}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{inventarioControl.fabricantes}" var="fabricante" itemValue="#{fabricante.id}" itemLabel="#{fabricante.nombre}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="selectOneMenuMaterial" value="Material" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuMaterial" value="#{inventarioControl.puntoLuz.poste.material.id}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{inventarioControl.materialesPoste}" var="material" itemValue="#{material.id}" itemLabel="#{material.descripcion}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="selectOneMenuAltura" value="Altura" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuAltura" value="#{inventarioControl.puntoLuz.poste.alturaPoste.id}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{inventarioControl.alturasPoste}" var="altura" itemValue="#{altura.id}" itemLabel="#{altura.descripcion}" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+
+                    <p:spacer />
+                    <p:commandButton id="commandButtonGuardarPoste" action="#{inventarioControl.guardarPoste}" value="Guardar cambios" update=":formAdministracion:growlMensajes" />
                 </p:tab>
 
                 <p:tab title="Medidor">
+                    <h:panelGrid columns="4">
+                        <h:outputLabel for="inputTextReferenciaMedidor" value="Referencia" style="font-weight: bold;" />
+                        <p:inputText id="inputTextReferenciaMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.referencia}" />
 
+                        <h:outputLabel for="inputTextSerialMedidor" value="Serial" style="font-weight: bold;" />
+                        <p:inputText id="inputTextSerialMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.serial}" />
+
+                        <h:outputLabel for="selectOneMenuTipoMedidor" value="Tipo de medidor" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuTipoMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.tipoMedidor.id}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{inventarioControl.tiposMedidor}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="selectOneMenuFabricanteMedidor" value="Fabricante" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuFabricanteMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.fabricante.id}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{inventarioControl.fabricantes}" var="fabricante" itemValue="#{fabricante.id}" itemLabel="#{fabricante.nombre}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="selectOneMenuFrecuenciaMedidor" value="Frecuencia" style="font-weight: bold;"/>
+                        <p:selectOneRadio id="selectOneMenuFrecuenciaMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.frecuencia.id}">
+                            <f:selectItems value="#{inventarioControl.frecuencias}" var="frecuencia" itemValue="#{frecuencia.id}" itemLabel="#{frecuencia.descripcion}" />
+                        </p:selectOneRadio>
+
+                        <h:outputLabel for="selectOneMenuPrecisionMedidor" value="Clase precisión" style="font-weight: bold;"/>
+                        <p:selectOneMenu id="selectOneMenuPrecisionMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.clasePrecision.id}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{inventarioControl.clasesPrecision}" var="clase" itemValue="#{clase.id}" itemLabel="#{clase.descripcion}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="selectOneMenuTipoConexionMedidor" value="Tipo de conexión red" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuTipoConexionMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.tipoConexionMedidor.id}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{inventarioControl.tiposConexionMedidor}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="selectOneMenuVoltajeAltaMedidor" value="Voltaje Alta" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuVoltajeAltaMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.voltajeAlta.id}" >
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{inventarioControl.voltajes}" var="voltaje" itemValue="#{voltaje.id}" itemLabel="#{voltaje.descripcion}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="selectOneMenuVoltajeBajaMedidor" value="Voltaje Baja" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuVoltajeBajaMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.voltajeBaja.id}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{inventarioControl.voltajes}" var="voltaje" itemValue="#{voltaje.id}" itemLabel="#{voltaje.descripcion}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="inputTextPotenciaMedidor" value="Potencia máxima a medir" style="font-weight: bold;" />
+                        <p:selectOneMenu id="inputTextPotenciaMedidor" value="#{inventarioControl.puntoLuz.medidorEnergia.potenciaMaxima.id}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{inventarioControl.potencias}" var="potencia" itemValue="#{potencia.id}" itemLabel="#{potencia.descripcion}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="selectOneMenuTipoProteccionAmbiente" value="Tipo protección ambiente" style="font-weight: bold;" />
+                        <p:selectOneMenu id="selectOneMenuTipoProteccionAmbiente" value="#{inventarioControl.puntoLuz.medidorEnergia.tipoProteccion.id}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{inventarioControl.tiposProteccion}" var="tipo" itemValue="#{tipo.id}" itemLabel="#{tipo.descripcion}" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+
+                    <p:spacer />
+                    <p:commandButton id="commandButtonGuardarMedidor" action="#{inventarioControl.guardarMedidor}" value="Guardar cambios" update=":formAdministracion:growlMensajes" />
                 </p:tab>
 
-                <p:tab title="Mediciones" rendered="#{not empty inventarioControl.puntoLuz.luminaria or not empty inventarioControl.puntoLuz.transformador}">
+                <p:tab title="Mediciones" rendered="#{not empty inventarioControl.puntoLuz.luminaria or not empty inventarioControl.puntoLuz.transformador and false}">
 
                 </p:tab>
 
                 <p:tab title="Novedades">
-
+                    <pe:timeline id="timelineNovedades" value="#{administracionControl.modeloTimeline}" locale="es" />
                 </p:tab>
-                
-                <p:tab title="Mantenimiento">
 
+                <p:tab title="Mantenimiento">
+                    <h:panelGrid id="panelGridNuevoMantenimiento" columns="1">
+                        <h:outputLabel for="calendarFechaProgramacion" value="Fecha:" />
+                        <p:calendar id="calendarFechaProgramacion" value="#{administracionControl.mantenimientoPuntoLuz.fechaProgramacion}" pattern="dd/MM/yyyy" locale="es" />
+
+                        <h:outputLabel for="inputTextareaObservacionesMantenimiento" value="Observaciones:" />
+                        <p:inputTextarea id="inputTextareaObservacionesMantenimiento" value="#{administracionControl.mantenimientoPuntoLuz.observaciones}" />
+
+                        <p:commandButton id="commandButtonAgregarMantenimiento" value="Agregar" action="#{administracionControl.agregarMantenimientoPuntoLuz}" update="panelGridNuevoMantenimiento, dataTableMantenimiento, timelineNovedades"  />
+                    </h:panelGrid>
+
+                    <p:dataTable id="dataTableMantenimiento" value="#{administracionControl.mantenimientosPuntosLuz}" var="mantenimiento">
+                        <p:column width="25%">
+                            <f:facet name="header">
+                                <h:outputText value="Fecha programación" />
+                            </f:facet>
+
+                            <h:outputText value="#{mantenimiento.fechaProgramacion}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column width="25%">
+                            <f:facet name="header">
+                                <h:outputText value="Fecha realización" />
+                            </f:facet>
+
+                            <h:outputText value="#{mantenimiento.fechaRealizacion}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column width="50%">
+                            <f:facet name="header">
+                                <h:outputText value="Observaciones" />
+                            </f:facet>
+
+                            <h:outputText value="#{mantenimiento.observaciones}" />
+                        </p:column>
+                    </p:dataTable>
                 </p:tab>
             </p:tabView>
 

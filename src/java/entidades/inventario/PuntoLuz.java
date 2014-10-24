@@ -137,4 +137,13 @@ public class PuntoLuz implements Serializable {
         return "entidades.inventario.PuntoLuz[ id=" + id + " ]";
     }
 
+    public String getDireccionCompleta() {
+        String direccion = "";
+        direccion = direccion.concat(ubicacionPunto.getMunicipio().getNombre() + " - ");
+        direccion = direccion.concat(ubicacionPunto.getBarrio().getNombre() + ": ");
+        direccion = direccion.concat(ubicacionPunto.getDireccion());
+
+        return direccion;
+    }
+
 }
