@@ -56,10 +56,22 @@
 
         <p:column style="text-align: center;">
             <f:facet name="header">
-                <h:outputText value="Acciones"/>
+                <h:outputText value="Detalle" />
             </f:facet>
 
-            <p:commandButton value="Ver incidente" onclick="PF('dialogDetalleIncidente').show();" update=":formDetalleIncidente">
+            <p:commandButton onclick="PF('dialogDetalleIncidente').show();" icon="ui-icon-search" update=":formDetalleIncidente">
+                
+                <f:setPropertyActionListener value="#{incidente}" target="#{administracionControl.incidenteSeleccionado}" />
+            </p:commandButton>
+        </p:column>
+        
+        <p:column style="text-align: center;">
+            <f:facet name="header">
+                <h:outputText value="Imágenes"/>
+            </f:facet>
+
+            <p:commandButton onclick="PF('dialogDetalleIncidente').show();" icon="ui-icon-image" update=":formDetalleIncidente">
+                
                 <f:setPropertyActionListener value="#{incidente}" target="#{administracionControl.incidenteSeleccionado}" />
             </p:commandButton>
         </p:column>

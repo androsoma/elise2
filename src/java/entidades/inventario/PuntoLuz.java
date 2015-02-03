@@ -9,12 +9,15 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
@@ -23,6 +26,14 @@ import javax.persistence.SequenceGenerator;
  * @author Yeison Osorio
  */
 @Entity
+        @NamedQueries({
+            @NamedQuery(name = "PuntoLuz.buscarPuntosConLuminaria",
+                    query = "SELECT pl FROM PuntoLuz pl WHERE pl.luminaria IS NOT NULL"),
+            @NamedQuery(name = "PuntoLuz.buscarPuntosLuzLuminariaConcentrador",
+                    query = "SELECT pl FROM PuntoLuz pl JOIN pl.luminaria l JOIN l.concentradores c WHERE c.id = :idConcentrador"),
+        @NamedQuery(name = "PuntoLuz.buscarPuntosLuzPorLuminaria",
+                query = "SELECT pl FROM PuntoLuz pl JOIN pl.luminaria l WHERE l.referencia = :referenciaLuminaria")
+})
 public class PuntoLuz implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,7 +51,7 @@ public class PuntoLuz implements Serializable {
     @JoinColumn(name = "fk_transformador", nullable = true)
     private Transformador transformador;
 
-    @OneToOne(cascade = {CascadeType.ALL})
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_luminaria", nullable = true)
     private Luminaria luminaria;
 

@@ -1,6 +1,8 @@
 package control;
 
+import ejb.inventario.ConcentradorFacade;
 import ejb.inventario.ConfiguracionFacade;
+import ejb.inventario.LuminariaFacade;
 import ejb.inventario.MedicionFacade;
 import ejb.inventario.PuntoLuzFacade;
 import ejb.inventario.TerceroFacade;
@@ -11,8 +13,10 @@ import ejb.mantenimiento.ReportePuntoLuzFacade;
 import ejb.mantenimiento.TipoEstadoReporteFacade;
 import ejb.mantenimiento.TipoIncidenteFacade;
 import entidades.inventario.Barrio;
+import entidades.inventario.Concentrador;
 import entidades.inventario.Configuracion;
 import entidades.inventario.Departamento;
+import entidades.inventario.Luminaria;
 import entidades.inventario.Medicion;
 import entidades.inventario.Municipio;
 import entidades.inventario.PuntoLuz;
@@ -47,7 +51,6 @@ import org.primefaces.event.map.OverlaySelectEvent;
 import org.primefaces.extensions.model.timeline.TimelineEvent;
 import org.primefaces.extensions.model.timeline.TimelineModel;
 import org.primefaces.model.UploadedFile;
-import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
@@ -55,7 +58,6 @@ import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
 import org.primefaces.model.map.Marker;
-import sun.management.ManagementFactoryHelper;
 
 /**
  *
@@ -91,6 +93,11 @@ public class AdministracionControl implements Serializable {
     private List<Medicion> mediciones;
     private LineChartModel modeloLineChart = new LineChartModel();
     private TimelineModel modeloTimeline;
+    private Concentrador concentrador;
+    private List<Luminaria> luminarias;
+    private Luminaria luminiaria;
+    private String serialConcentrador;
+    private String referenciaLuminaria;
 
     @ManagedProperty(name = "inventarioControl", value = "#{inventarioControl}")
     private InventarioControl inventarioControl;
@@ -130,10 +137,18 @@ public class AdministracionControl implements Serializable {
     @EJB
     @Inject
     private UsuarioFacade usuarioFacade;
-    
+
     @EJB
     @Inject
     private MedicionFacade medicionFacade;
+
+    @EJB
+    @Inject
+    private ConcentradorFacade concentradorFacade;
+    
+    @EJB
+    @Inject
+    private LuminariaFacade luminariaFacade;
 
     public AdministracionControl() {
 
@@ -345,6 +360,46 @@ public class AdministracionControl implements Serializable {
         this.modeloTimeline = modeloTimeline;
     }
 
+    public Concentrador getConcentrador() {
+        return concentrador;
+    }
+
+    public void setConcentrador(Concentrador concentrador) {
+        this.concentrador = concentrador;
+    }
+
+    public List<Luminaria> getLuminarias() {
+        return luminarias;
+    }
+
+    public void setLuminarias(List<Luminaria> luminarias) {
+        this.luminarias = luminarias;
+    }
+
+    public Luminaria getLuminiaria() {
+        return luminiaria;
+    }
+
+    public void setLuminiaria(Luminaria luminiaria) {
+        this.luminiaria = luminiaria;
+    }
+
+    public String getSerialConcentrador() {
+        return serialConcentrador;
+    }
+
+    public void setSerialConcentrador(String serialConcentrador) {
+        this.serialConcentrador = serialConcentrador;
+    }
+
+    public String getReferenciaLuminaria() {
+        return referenciaLuminaria;
+    }
+
+    public void setReferenciaLuminaria(String referenciaLuminaria) {
+        this.referenciaLuminaria = referenciaLuminaria;
+    }
+
     public InventarioControl getInventarioControl() {
         return inventarioControl;
     }
@@ -431,6 +486,22 @@ public class AdministracionControl implements Serializable {
 
     public void setMedicionFacade(MedicionFacade medicionFacade) {
         this.medicionFacade = medicionFacade;
+    }
+
+    public ConcentradorFacade getConcentradorFacade() {
+        return concentradorFacade;
+    }
+
+    public void setConcentradorFacade(ConcentradorFacade concentradorFacade) {
+        this.concentradorFacade = concentradorFacade;
+    }
+
+    public LuminariaFacade getLuminariaFacade() {
+        return luminariaFacade;
+    }
+
+    public void setLuminariaFacade(LuminariaFacade luminariaFacade) {
+        this.luminariaFacade = luminariaFacade;
     }
 
     public void generarMapaCiudadano() {
@@ -629,6 +700,12 @@ public class AdministracionControl implements Serializable {
         opcion = 5;
     }
 
+    public void inicializarConcentradores() {
+        opcion = 6;
+        serialConcentrador = "";
+        concentrador = new Concentrador();
+    }
+
     public void confirmarIncidente() {
         System.out.println("Confimar incidente.");
 
@@ -658,7 +735,7 @@ public class AdministracionControl implements Serializable {
         inventarioControl.inicializarBombillo();
         inventarioControl.inicializarPoste();
         inventarioControl.inicializarMedidor();
-        
+
         inicializarMantenimientoPuntoLuz();
         generarTimelinePuntoLuz();
         consultarMedicionesLuminaria();
@@ -704,28 +781,60 @@ public class AdministracionControl implements Serializable {
         inicializarMantenimientoPuntoLuz();
 
     }
-    
-    public void consultarMedicionesLuminaria(){
+
+    public void consultarMedicionesLuminaria() {
         mediciones = medicionFacade.buscarPorLuminaria(puntoLuzSeleccionado.getLuminaria().getId());
         modeloLineChart.clear();
         modeloLineChart = inicializarCategoryModel();
-        
+
     }
-    
+
     private LineChartModel inicializarCategoryModel() {
         LineChartModel modelo = new LineChartModel();
-        
+
         ChartSeries serie1 = new LineChartSeries();
         serie1.setLabel("Voltaje");
-        
-        for (Medicion medicion : mediciones) {            
+
+        for (Medicion medicion : mediciones) {
             serie1.set(medicion.getId(), medicion.getVoltaje());
         }
-        
+
         modelo.addSeries(serie1);
-        
+
         return modelo;
     }
-    
 
+    public void buscarConcentradorPorIdentificador() {
+        puntosLuz = new ArrayList<>();
+        concentrador = concentradorFacade.buscarConcentradorPorIdentificador(serialConcentrador);
+
+        if (concentrador != null) {
+            puntosLuz = puntoLuzFacade.buscarPuntosLuzLuminariasPorConcentrador(concentrador.getId());
+        }
+    }
+    
+    public void guardarConcentrador() {
+        inventarioControl.guardarConcentrador();
+        concentrador = inventarioControl.getConcentrador();
+        
+        puntosLuz.clear();
+    }
+    
+    public void inicializarAsociarLuminaria() {
+        referenciaLuminaria = "";
+        luminarias = new ArrayList<>();
+        luminiaria = new Luminaria();
+    }
+    
+    public void buscarLuminariaPorReferencia() {
+        luminarias = new ArrayList<>();
+        luminarias = luminariaFacade.buscarLuminariasPorReferencia(referenciaLuminaria);
+    }
+    
+    public void asociarLuminariaConcentrador() {
+        luminiaria.getConcentradores().add(concentrador);
+        luminariaFacade.edit(luminiaria);
+        
+        puntosLuz = puntoLuzFacade.buscarPuntosLuzLuminariasPorConcentrador(concentrador.getId());
+    }
 }

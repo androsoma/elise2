@@ -7,6 +7,7 @@ package entidades.inventario;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 
 /**
@@ -22,6 +25,9 @@ import javax.persistence.SequenceGenerator;
  * @author Yeison Osorio
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Concentrador.buscarPorIdentificador",
+            query = "SELECT c FROM Concentrador c WHERE c.identificador = :identificador")})
 public class Concentrador implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,7 +50,7 @@ public class Concentrador implements Serializable {
     @JoinColumn(name = "fk_tipoconcentrador")
     private TipoConcentrador tipoConcentrador;
 
-    @ManyToMany(mappedBy = "concentradores")
+    @ManyToMany(mappedBy = "concentradores", cascade = {CascadeType.ALL})
     private List<Luminaria> luminarias;
 
     public Long getId() {

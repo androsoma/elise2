@@ -42,7 +42,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Luminaria.findAll", query = "SELECT l FROM Luminaria l"),
     @NamedQuery(name = "Luminaria.findById", query = "SELECT l FROM Luminaria l WHERE l.id = :id"),
     @NamedQuery(name = "Luminaria.findByAltura", query = "SELECT l FROM Luminaria l WHERE l.altura = :altura"),
-    @NamedQuery(name = "Luminaria.findByReferencia", query = "SELECT l FROM Luminaria l WHERE l.referencia = :referencia")})
+    @NamedQuery(name = "Luminaria.findByReferencia", query = "SELECT l FROM Luminaria l WHERE l.referencia = :referencia"),
+    @NamedQuery(name = "Luminaria.buscarLuminariasPorReferencia", query = "SELECT l FROM Luminaria l WHERE l.referencia LIKE :referencia")})
 public class Luminaria implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -79,7 +80,7 @@ public class Luminaria implements Serializable {
     @JoinColumn(name = "fk_potencia")
     private Potencia potencia;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "LuminariaConcentrador",
             joinColumns = {
@@ -87,6 +88,9 @@ public class Luminaria implements Serializable {
             inverseJoinColumns = {
                 @JoinColumn(name = "fk_concentrador", referencedColumnName = "id")})
     private List<Concentrador> concentradores;
+
+    @OneToOne(mappedBy = "luminaria", fetch = FetchType.EAGER)
+    private PuntoLuz puntoLuz;
 
     @Column(name = "altura")
     private float altura;
@@ -182,6 +186,14 @@ public class Luminaria implements Serializable {
 
     public void setConcentradores(List<Concentrador> concentradores) {
         this.concentradores = concentradores;
+    }
+
+    public PuntoLuz getPuntoLuz() {
+        return puntoLuz;
+    }
+
+    public void setPuntoLuz(PuntoLuz puntoLuz) {
+        this.puntoLuz = puntoLuz;
     }
 
     public String getReferencia() {

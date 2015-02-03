@@ -1,0 +1,35 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"        
+      contentType="text/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:dialog id="dialogCrearConcentrador" header="Crear concentrador" widgetVar="dialogCrearConcentrador"
+              closable="true" modal="true" resizable="false" draggable="false">
+        <h:form id="formCrearConcentrador">
+            <h:panelGrid columns="1" width="100%">
+                <h:outputLabel for="inputTextIdentificadorConcentrador" value="Serial" style="font-weight: bold;" />
+                <p:inputText id="inputTextIdentificadorConcentrador" value="#{inventarioControl.concentrador.identificador}" required="true" />
+                
+                <h:outputLabel for="inputTextReferenciaConcentrador" value="Referencia" style="font-weight: bold;" />
+                <p:inputText id="inputTextReferenciaConcentrador" value="#{inventarioControl.concentrador.referencia}" />
+                
+                <h:outputLabel for="selectOneMenuTipoConcentrador" value="Tipo de concentrador" style="font-weight: bold;" />
+                <p:selectOneMenu id="selectOneMenuTipoConcentrador" value="#{inventarioControl.concentrador.tipoConcentrador.id}">
+                    <f:selectItem itemValue="" itemLabel="Seleccione..." />
+                    <f:selectItems value="#{inventarioControl.tiposConcentrador}" var="tipoConcentrador" itemValue="#{fabricante.id}" itemLabel="#{fabricante.nombre}" />
+                </p:selectOneMenu>
+                
+                <h:outputLabel for="selectOneMenuFabricanteConcentrador" value="Fabricante" style="font-weight: bold;" />
+                <p:selectOneMenu id="selectOneMenuFabricanteConcentrador" value="#{inventarioControl.concentrador.fabricante.id}">
+                    <f:selectItem itemValue="" itemLabel="Seleccione..." />
+                    <f:selectItems value="#{inventarioControl.fabricantes}" var="fabricante" itemValue="#{fabricante.id}" itemLabel="#{fabricante.nombre}" />
+                </p:selectOneMenu>
+
+                <p:spacer />
+                <p:commandButton value="Guardar" action="#{administracionControl.guardarConcentrador}" oncomplete="PF('dialogCrearConcentrador').hide();"
+                                 update=":formAdministracion:panelGridConcentradores"  />
+            </h:panelGrid>
+        </h:form>
+    </p:dialog>
+</html>

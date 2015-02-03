@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <p:commandButton id="commandButtonNuevoConcentrador" value="Nuevo concentrador" icon="ui-icon-plusthick"
+                     action="#{inventarioControl.inicializarConcentrador}" onclick="PF('dialogCrearConcentrador').show();"
+                     update=":formCrearConcentrador" />
+
+    <h:panelGrid id="panelGridBuscarConcentrador" columns="2">
+        <p:outputLabel for="inputTextSerialConcentrador" value="Serial" />
+        <p:spacer />
+
+        <p:inputText id="inputTextSerialConcentrador" value="#{administracionControl.serialConcentrador}" />
+        <p:commandButton id="commandButtonBuscarConcentrador" icon="ui-icon-search"
+                         action="#{administracionControl.buscarConcentradorPorIdentificador}"
+                         update="formAdministracion:panelGridConcentradores" />
+    </h:panelGrid>
+    <hr />
+
+    <h:outputText value="No se encontraron resultados." rendered="#{empty administracionControl.concentrador}"
+                  style="font-style: italic;" />
+
+    <h:panelGrid id="panelGridDetalleConcentrador" rendered="#{not empty administracionControl.concentrador.id}">
+        <h:outputText value="Concentrador" style="font-weight: bold; font-size: 150%;" />
+
+        <h:outputText id="outputTextSerialConcentrador" value="Serial: #{administracionControl.concentrador.identificador}" />
+
+        <p:commandButton id="commandButtonAsocialLuminarias" value="Asociar luminaria" icon="ui-icon-plusthick"
+                         action="#{administracionControl.inicializarAsociarLuminaria}" onclick="PF('dialogAsociarLuminariaConcentrador').show();"
+                         update=":formAsociarLuminariaConcentrador" />
+
+        <p:dataTable id="dataTableLuminariasConcentrador" value="#{administracionControl.puntosLuz}" var="puntoLuz"
+                     emptyMessage="No hay luminarias asociadas al concentrador.">
+            <p:column style="width: 17%;">
+                <f:facet name="header">
+                    <h:outputText value="Referencia" />
+                </f:facet>
+
+                <h:outputText value="#{puntoLuz.luminaria.referencia}" />
+            </p:column>
+
+            <p:column style="width: 20%;">
+                <f:facet name="header">
+                    <h:outputText value="Ciudad" />
+                </f:facet>
+
+                <h:outputText value="#{puntoLuz.ubicacionPunto.municipio.nombre}, #{puntoLuz.ubicacionPunto.municipio.departamento.nombre}" />
+            </p:column>
+
+            <p:column style="width: 25%;">
+                <f:facet name="header">
+                    <h:outputText value="Barrio" />
+                </f:facet>
+
+                <h:outputText value="#{puntoLuz.ubicacionPunto.barrio.nombre}" />
+            </p:column>
+
+            <p:column style="width: 25%;">
+                <f:facet name="header">
+                    <h:outputText value="Dirección" />
+                </f:facet>
+
+                <h:outputText value="#{puntoLuz.ubicacionPunto.direccion}" />
+            </p:column>
+
+            <p:column style="text-align: center; width: 13%;" >
+                <f:facet name="header">
+                    <h:outputText value="Desasociar" />
+                </f:facet>
+
+                <p:commandButton icon="ui-icon-trash">
+                    <f:setPropertyActionListener target="#{administracionControl.puntoLuzSeleccionado}" value="#{puntoLuz}" />
+                </p:commandButton>
+            </p:column>
+        </p:dataTable>
+    </h:panelGrid>
+
+    <p:dialog id="dialogNuevoConcentrador" widgetVar="dialogNuevoConcentrador">
+
+    </p:dialog>
+</html>

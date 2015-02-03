@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ejb.inventario;
 
-import entidades.inventario.Luminaria;
+import entidades.inventario.ConsumoLuminaria;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -18,7 +17,8 @@ import javax.persistence.Query;
  * @author LENOVO
  */
 @Stateless
-public class LuminariaFacade extends AbstractFacade<Luminaria> {
+public class ConsumoLuminariaFacade extends AbstractFacade<ConsumoLuminaria> {
+
     @PersistenceContext(unitName = "elisePU")
     private EntityManager em;
 
@@ -27,15 +27,15 @@ public class LuminariaFacade extends AbstractFacade<Luminaria> {
         return em;
     }
 
-    public LuminariaFacade() {
-        super(Luminaria.class);
+    public ConsumoLuminariaFacade() {
+        super(ConsumoLuminaria.class);
     }
-    
-    public List<Luminaria> buscarLuminariasPorReferencia(String referenciaLuminaria) {
-        Query query = em.createNamedQuery("Luminaria.buscarLuminariasPorReferencia");
-        query.setParameter("referencia", "%" + referenciaLuminaria + "%");
-        
+
+    public List<ConsumoLuminaria> buscarConsumosPorLuminaria(Long idLuminaria) {
+        Query query = em.createNamedQuery("ConsumoLuminaria.buscarPorLuminaria");
+        query.setParameter("idLuminaria", idLuminaria);
+
         return query.getResultList();
     }
-    
+
 }

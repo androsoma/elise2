@@ -29,6 +29,7 @@
                     <p:menu style="border: none; width: 100%;">
                         <p:menuitem value="Puntos de luz" action="#{administracionControl.inicializarPuntosLuz}" update="panelGroupAdministracion" />
                         <p:menuitem value="Incidentes reportados" action="#{administracionControl.inicializarIncidentesReportados}" update="panelGroupAdministracion" />
+                        <p:menuitem value="Concentradores" action="#{administracionControl.inicializarConcentradores}" update="panelGroupAdministracion" />
                         <p:menuitem value="Usuarios" action="#{administracionControl.inicializarAdministracionUsuarios}" update="panelGroupAdministracion" />
                         <p:menuitem value="Estadísticas" action="#{administracionControl.inicializarEstadisticas}" update="panelGroupAdministracion" />
                     </p:menu>
@@ -40,7 +41,7 @@
                             <ui:include src="administracion/puntosLuz.xhtml" />
                         </h:panelGrid>
 
-                        <h:panelGrid id="panelGridIncidentesReportados" rendered="#{administracionControl.opcion == 2}" width="100%">
+                        <h:panelGrid id="panelGridIncidentesReportados" rendered="#{administracionControl.opcion == 2}" width="100%" style="font-size: 85%;">
                             <ui:include src="administracion/incidentesPuntoLuz.xhtml" />
                         </h:panelGrid>
 
@@ -55,6 +56,10 @@
                         <h:panelGrid id="panelGridParametricas" rendered="#{administracionControl.opcion == 5}" width="100%">
                             <ui:include src="administracion/parametricas.xhtml" />
                         </h:panelGrid>
+
+                        <h:panelGrid id="panelGridConcentradores" rendered="#{administracionControl.opcion == 6}" width="100%" style="font-size: 85%;">
+                            <ui:include src="administracion/concentradores.xhtml" />
+                        </h:panelGrid>
                     </h:panelGroup>
                 </p:layoutUnit>
             </p:layout>
@@ -63,5 +68,7 @@
         <ui:include src="modal/detallePuntoLuz.xhtml" />
         <ui:include src="modal/reportarIncidente.xhtml" />
         <ui:include src="modal/detalleIncidente.xhtml" />
+        <ui:include src="modal/crearConcentrador.xhtml" />
+        <ui:include src="modal/asociarLuminaria.xhtml" />
     </h:body>
 </html>

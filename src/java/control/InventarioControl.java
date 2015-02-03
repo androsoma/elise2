@@ -11,6 +11,7 @@ import ejb.inventario.BarrioFacade;
 import ejb.inventario.BombilloFacade;
 import ejb.inventario.BrazoLuminariaFacade;
 import ejb.inventario.ClasePrecisionFacade;
+import ejb.inventario.ConcentradorFacade;
 import ejb.inventario.DepartamentoFacade;
 import ejb.inventario.FabricanteFacade;
 import ejb.inventario.FaseFacade;
@@ -25,6 +26,7 @@ import ejb.inventario.PuntoLuzFacade;
 import ejb.inventario.TipoArrancadorFacade;
 import ejb.inventario.TipoBalastoFacade;
 import ejb.inventario.TipoBombilloFacade;
+import ejb.inventario.TipoConcentradorFacade;
 import ejb.inventario.TipoConexionMedidorFacade;
 import ejb.inventario.TipoConexionTransformadorFacade;
 import ejb.inventario.TipoHerrajeFacade;
@@ -42,6 +44,7 @@ import entidades.inventario.Barrio;
 import entidades.inventario.Bombillo;
 import entidades.inventario.BrazoLuminaria;
 import entidades.inventario.ClasePrecision;
+import entidades.inventario.Concentrador;
 import entidades.inventario.Departamento;
 import entidades.inventario.Fabricante;
 import entidades.inventario.Fase;
@@ -56,6 +59,7 @@ import entidades.inventario.PuntoLuz;
 import entidades.inventario.TipoArrancador;
 import entidades.inventario.TipoBalasto;
 import entidades.inventario.TipoBombillo;
+import entidades.inventario.TipoConcentrador;
 import entidades.inventario.TipoConexionMedidor;
 import entidades.inventario.TipoConexionTransformador;
 import entidades.inventario.TipoHerraje;
@@ -141,6 +145,10 @@ public class InventarioControl implements Serializable {
 
     @EJB
     @Inject
+    TipoConcentradorFacade tipoConcentradorFacade;
+
+    @EJB
+    @Inject
     TransformadorFacade transformadorFacade;
 
     @EJB
@@ -207,6 +215,10 @@ public class InventarioControl implements Serializable {
     @Inject
     MedidorEnergiaFacade medidorEnergiaFacade;
 
+    @EJB
+    @Inject
+    private ConcentradorFacade concentradorFacade;
+
     List<Departamento> departamentos = new ArrayList<>();
     List<Municipio> municipios = new ArrayList<>();
     List<Zona> zonas = new ArrayList<>();
@@ -228,6 +240,7 @@ public class InventarioControl implements Serializable {
     List<Voltaje> voltajes = null;
     List<Potencia> potencias = null;
     List<Fase> fases = null;
+    List<TipoConcentrador> tiposConcentrador = null;
     boolean asociartransformador = false;
 
     private PuntoLuz puntoLuz;
@@ -236,6 +249,7 @@ public class InventarioControl implements Serializable {
     private Municipio municipio = new Municipio();
     private Zona zona = new Zona();
     private Barrio barrio = new Barrio();
+    private Concentrador concentrador;
 
     /**
      * Creates a new instance of InventarioControl
@@ -337,6 +351,14 @@ public class InventarioControl implements Serializable {
 
     public void setTipoConexionMedidorFacade(TipoConexionMedidorFacade tipoConexionMedidorFacade) {
         this.tipoConexionMedidorFacade = tipoConexionMedidorFacade;
+    }
+
+    public TipoConcentradorFacade getTipoConcentradorFacade() {
+        return tipoConcentradorFacade;
+    }
+
+    public void setTipoConcentradorFacade(TipoConcentradorFacade tipoConcentradorFacade) {
+        this.tipoConcentradorFacade = tipoConcentradorFacade;
     }
 
     public ClasePrecisionFacade getClasePrecisionFacade() {
@@ -485,6 +507,14 @@ public class InventarioControl implements Serializable {
 
     public void setMedidorEnergiaFacade(MedidorEnergiaFacade medidorEnergiaFacade) {
         this.medidorEnergiaFacade = medidorEnergiaFacade;
+    }
+
+    public ConcentradorFacade getConcentradorFacade() {
+        return concentradorFacade;
+    }
+
+    public void setConcentradorFacade(ConcentradorFacade concentradorFacade) {
+        this.concentradorFacade = concentradorFacade;
     }
 
     public List<Departamento> getDepartamentos() {
@@ -659,6 +689,14 @@ public class InventarioControl implements Serializable {
         this.fases = fases;
     }
 
+    public List<TipoConcentrador> getTiposConcentrador() {
+        return tiposConcentrador;
+    }
+
+    public void setTiposConcentrador(List<TipoConcentrador> tiposConcentrador) {
+        this.tiposConcentrador = tiposConcentrador;
+    }
+
     public boolean isAsociartransformador() {
         return asociartransformador;
     }
@@ -707,8 +745,15 @@ public class InventarioControl implements Serializable {
         this.barrio = barrio;
     }
 
+    public Concentrador getConcentrador() {
+        return concentrador;
+    }
+
+    public void setConcentrador(Concentrador concentrador) {
+        this.concentrador = concentrador;
+    }
+
     public String inicializarPunto() {
-        System.out.println("Entré a inicializar punto.");
         barrios = new ArrayList<>();
         barrios = getBarrioFacade().buscarTodos();
 
@@ -765,7 +810,6 @@ public class InventarioControl implements Serializable {
     }
 
     public String inicializarTiposTransformador() {
-        System.out.println("Inicializar listas transforamdor.");
         tiposTransformador = new ArrayList<>();
         tiposConexionTransformador = new ArrayList<>();
         fabricantes = new ArrayList<>();
@@ -786,7 +830,6 @@ public class InventarioControl implements Serializable {
     }
 
     public String inicializarTiposLuminaria() {
-        System.out.println("Inicializar listas luminaria.");
         tiposHerraje = new ArrayList<>();
         fabricantes = new ArrayList<>();
         tiposBalasto = new ArrayList<>();
@@ -825,7 +868,6 @@ public class InventarioControl implements Serializable {
     }
 
     public String inicializarTiposBombillo() {
-        System.out.println("Inicializar listas bombillo.");
         tiposBombillo = new ArrayList<>();
         fabricantes = new ArrayList<>();
         potencias = new ArrayList<>();
@@ -838,8 +880,6 @@ public class InventarioControl implements Serializable {
     }
 
     public String inicializarTiposPoste() {
-        System.out.println("Inicializar listas poste.");
-
         materialesPoste = new ArrayList<>();
         alturasPoste = new ArrayList<>();
         fabricantes = new ArrayList<>();
@@ -852,8 +892,6 @@ public class InventarioControl implements Serializable {
     }
 
     public String inicializarTiposMedidor() {
-        System.out.println("Inicializar listas medidor.");
-
         fabricantes = new ArrayList<>();
         tiposMedidor = new ArrayList<>();
         clasesPrecision = new ArrayList<>();
@@ -876,28 +914,18 @@ public class InventarioControl implements Serializable {
     }
 
     public void guardarBrazoLuminaria() {
-        System.out.println("Voy a guardar brazo luminaria.");
-
         getBrazoLuminariaFacade().create(puntoLuz.getLuminaria().getBrazoLuminaria());
     }
 
     public void editarBrazoLuminaria() {
-        System.out.println("Voy a editar brazo luminaria.");
-
         getBrazoLuminariaFacade().edit(puntoLuz.getLuminaria().getBrazoLuminaria());
     }
 
     public void guardarArrancador() {
-        System.out.println("Voy a guardar el arrancador.");
-
         if (puntoLuz.getLuminaria().getArrancador().getId() == null) {
             getArrancadorFacade().create(puntoLuz.getLuminaria().getArrancador());
-
-            System.out.println("Id del arrancador creado: " + puntoLuz.getLuminaria().getArrancador().getId());
         } else {
             getArrancadorFacade().edit(puntoLuz.getLuminaria().getArrancador());
-
-            System.out.println("Id del arrancador editado: " + puntoLuz.getLuminaria().getArrancador().getId());
         }
     }
 
@@ -906,7 +934,6 @@ public class InventarioControl implements Serializable {
     }
 
     public String asociarTransformador() {
-        System.out.println("ingreso al metodo");
         asociartransformador = true;
         return "pm:map";
     }
@@ -928,9 +955,9 @@ public class InventarioControl implements Serializable {
         }
 
         getPuntoLuzFacade().create(puntoLuz);
-        
+
         barrios.clear();
-        
+
         barrios = barrioFacade.buscarTodos();
     }
 
@@ -1099,14 +1126,10 @@ public class InventarioControl implements Serializable {
 
     public void inicializarArrancador() {
         if (puntoLuz.getLuminaria().getArrancador().getTipoArrancador() == null) {
-            System.out.println("Asigno un nuevo tipo arrancador.");
-
             puntoLuz.getLuminaria().getArrancador().setTipoArrancador(new TipoArrancador());
         }
 
         if (puntoLuz.getLuminaria().getArrancador().getFabricante() == null) {
-            System.out.println("Asigno un nuevo fabricante.");
-
             puntoLuz.getLuminaria().getArrancador().setFabricante(new Fabricante());
         }
     }
@@ -1625,5 +1648,31 @@ public class InventarioControl implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
 
         inicializarMedidor();
+    }
+
+    public void inicializarConcentrador() {
+        concentrador = new Concentrador();
+        concentrador.setTipoConcentrador(new TipoConcentrador());
+        concentrador.setFabricante(new Fabricante());
+
+        tiposConcentrador = tipoConcentradorFacade.findAll();
+        fabricantes = fabricanteFacade.findAll();
+    }
+
+    public void guardarConcentrador() {
+        if (concentrador.getTipoConcentrador().getId() == 0) {
+           concentrador.setTipoConcentrador(null);
+        }
+        
+        if (concentrador.getFabricante().getId() == 0) {
+            concentrador.setFabricante(null);
+        }
+        
+        if (concentrador.getId() == null) {
+            concentradorFacade.create(concentrador);
+
+        } else {
+            concentradorFacade.edit(concentrador);
+        }
     }
 }
