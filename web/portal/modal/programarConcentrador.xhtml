@@ -1,0 +1,23 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"        
+      contentType="text/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:dialog id="dialogProgramarConcentrador" header="Programación" widgetVar="dialogProgramarConcentrador"
+              closable="true" modal="true" resizable="false" draggable="false" dynamic="true">
+        <h:form id="formProgramarConcentrador">
+            <h:panelGrid columns="1" width="100%">
+                <h:outputLabel for="outputTextIdentificadorConcentrador" value="Serial" style="font-weight: bold;" />
+                <h:outputText id="outputTextIdentificadorConcentrador" value="#{inventarioControl.concentrador.identificador}" />
+                
+                <h:outputLabel for="inputTextCantidadHoras" value="Cantidad horas" style="font-weight: bold;" />
+                <p:inputText id="inputTextCantidadHoras" value="#{inventarioControl.programacionConcentrador.cantidadHoras}" />
+                
+                <p:spacer />
+                <p:commandButton value="Guardar cambios" action="#{administracionControl.programarConcentrador}" oncomplete="PF('dialogProgramarConcentrador').hide();"
+                                 update=":formAdministracion:panelGridConcentradores"  />
+            </h:panelGrid>
+        </h:form>
+    </p:dialog>
+</html>

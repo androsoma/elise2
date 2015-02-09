@@ -22,6 +22,7 @@ import ejb.inventario.MedidorEnergiaFacade;
 import ejb.inventario.MunicipioFacade;
 import ejb.inventario.PosteFacade;
 import ejb.inventario.PotenciaFacade;
+import ejb.inventario.ProgramacionConcentradorFacade;
 import ejb.inventario.PuntoLuzFacade;
 import ejb.inventario.TipoArrancadorFacade;
 import ejb.inventario.TipoBalastoFacade;
@@ -55,6 +56,7 @@ import entidades.inventario.MedidorEnergia;
 import entidades.inventario.Municipio;
 import entidades.inventario.Poste;
 import entidades.inventario.Potencia;
+import entidades.inventario.ProgramacionConcentrador;
 import entidades.inventario.PuntoLuz;
 import entidades.inventario.TipoArrancador;
 import entidades.inventario.TipoBalasto;
@@ -218,6 +220,10 @@ public class InventarioControl implements Serializable {
     @EJB
     @Inject
     private ConcentradorFacade concentradorFacade;
+    
+    @EJB
+    @Inject
+    private ProgramacionConcentradorFacade programacionConcentradorFacade;
 
     List<Departamento> departamentos = new ArrayList<>();
     List<Municipio> municipios = new ArrayList<>();
@@ -250,6 +256,7 @@ public class InventarioControl implements Serializable {
     private Zona zona = new Zona();
     private Barrio barrio = new Barrio();
     private Concentrador concentrador;
+    private ProgramacionConcentrador programacionConcentrador;
 
     /**
      * Creates a new instance of InventarioControl
@@ -515,6 +522,22 @@ public class InventarioControl implements Serializable {
 
     public void setConcentradorFacade(ConcentradorFacade concentradorFacade) {
         this.concentradorFacade = concentradorFacade;
+    }
+
+    public ProgramacionConcentradorFacade getProgramacionConcentradorFacade() {
+        return programacionConcentradorFacade;
+    }
+
+    public void setProgramacionConcentradorFacade(ProgramacionConcentradorFacade programacionConcentradorFacade) {
+        this.programacionConcentradorFacade = programacionConcentradorFacade;
+    }
+
+    public ProgramacionConcentrador getProgramacionConcentrador() {
+        return programacionConcentrador;
+    }
+
+    public void setProgramacionConcentrador(ProgramacionConcentrador programacionConcentrador) {
+        this.programacionConcentrador = programacionConcentrador;
     }
 
     public List<Departamento> getDepartamentos() {
@@ -1673,6 +1696,22 @@ public class InventarioControl implements Serializable {
 
         } else {
             concentradorFacade.edit(concentrador);
+        }
+    }
+    
+    public void consultarProgramacionConcentrador() {
+        programacionConcentrador = programacionConcentradorFacade.buscarProgramacionConcentradorPorIdentificador(concentrador.getIdentificador());
+        
+        if (programacionConcentrador == null) {
+            programacionConcentrador = new ProgramacionConcentrador();
+        }
+    }
+    
+    public void guardarProgramacionConcentrador() {
+        if (programacionConcentrador.getId() == null) {
+           programacionConcentradorFacade.create(programacionConcentrador);
+        } else {
+           programacionConcentradorFacade.edit(programacionConcentrador);
         }
     }
 }

@@ -837,4 +837,16 @@ public class AdministracionControl implements Serializable {
         
         puntosLuz = puntoLuzFacade.buscarPuntosLuzLuminariasPorConcentrador(concentrador.getId());
     }
+    
+    public void consultarConcentrador() {
+        inventarioControl.guardarProgramacionConcentrador();
+    }
+    
+    public void programarConcentrador() {
+        inventarioControl.guardarProgramacionConcentrador();
+    }
+    
+    public void solicitarLectura() {
+        
+    }
 }
