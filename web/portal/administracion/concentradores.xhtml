@@ -29,9 +29,20 @@
 
         <h:outputText id="outputTextSerialConcentrador" value="Serial: #{administracionControl.concentrador.identificador}" />
 
-        <p:commandButton id="commandButtonAsocialLuminarias" value="Asociar luminaria" icon="ui-icon-plusthick"
-                         action="#{administracionControl.inicializarAsociarLuminaria}" onclick="PF('dialogAsociarLuminariaConcentrador').show();"
-                         update=":formAsociarLuminariaConcentrador" />
+        <h:panelGrid id="panelGridComandosConcentrador" columns="3">
+            <p:commandButton id="commandButtonAsocialLuminarias" value="Asociar luminaria" icon="ui-icon-plusthick"
+                             action="#{administracionControl.inicializarAsociarLuminaria}" onclick="PF('dialogAsociarLuminariaConcentrador').show();"
+                             update=":formAsociarLuminariaConcentrador" />
+            
+            <p:commandButton id="commandButtonProgramarConcentrador" value="Programación" icon="ui-icon-calendar"
+                             action="#{administracionControl.programarConcentrador}" onclick="PF('dialogProgramarConcentrador').show();"
+                             update=":formProgramarConcentrador" />
+            
+            <p:commandButton id="commandButtonSolicitarLectura" value="Solicitar lectura" icon="ui-icon-transferthick-e-w"
+                             action="#{administracionControl.solicitarLectura}"
+                             update=":formAdministracion:growlMensajes" />
+        </h:panelGrid>
+
 
         <p:dataTable id="dataTableLuminariasConcentrador" value="#{administracionControl.puntosLuz}" var="puntoLuz"
                      emptyMessage="No hay luminarias asociadas al concentrador.">

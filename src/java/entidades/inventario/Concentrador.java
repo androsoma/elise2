@@ -42,6 +42,9 @@ public class Concentrador implements Serializable {
     @Column(nullable = false)
     private String referencia;
 
+    @Column
+    private String direccionIP;
+
     @ManyToOne
     @JoinColumn(name = "fk_fabricante")
     private Fabricante fabricante;
@@ -75,6 +78,14 @@ public class Concentrador implements Serializable {
 
     public void setReferencia(String referencia) {
         this.referencia = referencia;
+    }
+
+    public String getDireccionIP() {
+        return direccionIP;
+    }
+
+    public void setDireccionIP(String direccionIP) {
+        this.direccionIP = direccionIP;
     }
 
     public Fabricante getFabricante() {

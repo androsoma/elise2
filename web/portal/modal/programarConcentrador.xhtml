@@ -9,13 +9,13 @@
         <h:form id="formProgramarConcentrador">
             <h:panelGrid columns="1" width="100%">
                 <h:outputLabel for="outputTextIdentificadorConcentrador" value="Serial" style="font-weight: bold;" />
-                <h:outputText id="outputTextIdentificadorConcentrador" value="#{inventarioControl.concentrador.identificador}" />
+                <h:outputText id="outputTextIdentificadorConcentrador" value="#{administracionControl.concentrador.identificador}" />
                 
                 <h:outputLabel for="inputTextCantidadHoras" value="Cantidad horas" style="font-weight: bold;" />
-                <p:inputText id="inputTextCantidadHoras" value="#{inventarioControl.programacionConcentrador.cantidadHoras}" />
+                <p:spinner id="inputTextCantidadHoras" value="#{inventarioControl.programacionConcentrador.cantidadHoras}" min="0" />
                 
                 <p:spacer />
-                <p:commandButton value="Guardar cambios" action="#{administracionControl.programarConcentrador}" oncomplete="PF('dialogProgramarConcentrador').hide();"
+                <p:commandButton value="Guardar cambios" action="#{administracionControl.guardarProgramacionConcentrador}" oncomplete="PF('dialogProgramarConcentrador').hide();"
                                  update=":formAdministracion:panelGridConcentradores"  />
             </h:panelGrid>
         </h:form>

@@ -145,7 +145,7 @@ public class AdministracionControl implements Serializable {
     @EJB
     @Inject
     private ConcentradorFacade concentradorFacade;
-    
+
     @EJB
     @Inject
     private LuminariaFacade luminariaFacade;
@@ -812,41 +812,47 @@ public class AdministracionControl implements Serializable {
             puntosLuz = puntoLuzFacade.buscarPuntosLuzLuminariasPorConcentrador(concentrador.getId());
         }
     }
-    
+
     public void guardarConcentrador() {
         inventarioControl.guardarConcentrador();
         concentrador = inventarioControl.getConcentrador();
-        
+
         puntosLuz.clear();
     }
-    
+
     public void inicializarAsociarLuminaria() {
         referenciaLuminaria = "";
         luminarias = new ArrayList<>();
         luminiaria = new Luminaria();
     }
-    
+
     public void buscarLuminariaPorReferencia() {
         luminarias = new ArrayList<>();
         luminarias = luminariaFacade.buscarLuminariasPorReferencia(referenciaLuminaria);
     }
-    
+
     public void asociarLuminariaConcentrador() {
         luminiaria.getConcentradores().add(concentrador);
         luminariaFacade.edit(luminiaria);
-        
+
         puntosLuz = puntoLuzFacade.buscarPuntosLuzLuminariasPorConcentrador(concentrador.getId());
     }
-    
+
     public void consultarConcentrador() {
         inventarioControl.guardarProgramacionConcentrador();
     }
-    
+
     public void programarConcentrador() {
+        inventarioControl.setConcentrador(concentrador);
+        inventarioControl.consultarProgramacionConcentrador();
+    }
+
+    public void guardarProgramacionConcentrador() {
         inventarioControl.guardarProgramacionConcentrador();
     }
-    
+
     public void solicitarLectura() {
-        
+        FacesMessage message = new FacesMessage("Lectura.", "Solicitando lectura.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

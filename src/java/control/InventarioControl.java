@@ -1708,6 +1708,8 @@ public class InventarioControl implements Serializable {
     }
     
     public void guardarProgramacionConcentrador() {
+        programacionConcentrador.setConcentrador(concentrador);
+        
         if (programacionConcentrador.getId() == null) {
            programacionConcentradorFacade.create(programacionConcentrador);
         } else {
