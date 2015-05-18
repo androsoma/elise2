@@ -9,6 +9,12 @@
     <h:head>
         <title>Elise</title>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true" />
+
+        <f:facet name="middle">
+            <h:outputStylesheet name="bootstrap/css/bootstrap.css" />
+
+            <h:outputScript name="bootstrap/js/bootstrap.js" />
+        </f:facet>
     </h:head>
 
     <h:body>
@@ -27,7 +33,7 @@
                         <p:inputText id="inputTextCorreo" value="#{administracionControl.incidente.tercero.email}"
                                      required="true" requiredMessage="Debe relacionar un correo electrónico." style="width: 98%;"
                                      validatorMessage="Debe relacionar un correo electrónico válido.">
-                            
+
                             <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                         </p:inputText>
                         <p:message for="inputTextCorreo" />
